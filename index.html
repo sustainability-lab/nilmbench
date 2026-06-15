@@ -471,6 +471,17 @@
         .model-legend { display: flex; flex-wrap: wrap; gap: 0.7rem 1rem; margin-top: 1.1rem; font-size: 0.86rem; color: var(--text-muted); align-items: center; }
         .model-legend .pill { cursor: default; }
 
+        .task-viz { background: linear-gradient(180deg, rgba(125,140,160,0.05), rgba(125,140,160,0)); border: 1px solid var(--border); border-radius: 11px; padding: 0.55rem 0.5rem 0.25rem; margin-bottom: 1.15rem; }
+        .task-viz svg { width: 100%; height: auto; display: block; overflow: visible; }
+        .hg { fill: none; stroke-width: 1.7; stroke-linejoin: round; stroke-linecap: round; }
+        .hg-train { stroke: var(--accent); } .hg-train .fillbody { fill: var(--accent); opacity: 0.12; stroke: none; }
+        .hg-test { stroke: #f5a524; }
+        .vlab { font-family: var(--mono); font-size: 10.5px; fill: var(--text-muted); }
+        .vsub { font-family: var(--mono); font-size: 10.5px; font-weight: 700; }
+        .vq { font-family: 'Sora',sans-serif; font-size: 11px; font-weight: 800; fill: #07110c; }
+        .varrow { stroke: var(--text-muted); stroke-width: 1.6; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+        .vdash { stroke: var(--border-hover); stroke-width: 1.4; stroke-dasharray: 3 4; }
+
         /* ===== BibTeX ===== */
         .bib { position: relative; background: #0a0e15; border: 1px solid var(--border); border-radius: 14px; overflow: hidden; margin-top: 1.5rem; }
         .bib pre { padding: 1.5rem; overflow-x: auto; font-family: var(--mono); font-size: 0.82rem; line-height: 1.7; color: var(--text-secondary); }
@@ -1001,18 +1012,50 @@ experiment['test']['metrics'] = ['mae', 'f1score', 'sae', 'nep']
 
     <div class="tasks-grid">
         <div class="task-card">
+            <div class="task-viz"><svg viewBox="0 0 300 116" role="img" aria-label="One building split in time: train on the past, test on a held-out later week.">
+  <text x="150" y="13" text-anchor="middle" class="vlab">Building 1 · same home</text>
+  <g class="hg hg-train" transform="translate(136,18) scale(1.2)"><path class="fillbody" d="M4,13 V27 H24 V13 Z"/><path d="M2,13 L14,3 L26,13 M4,13 V27 H24 V13 M11,27 V20 H17 V27"/></g>
+  <line x1="150" y1="54" x2="150" y2="66" class="vdash"/>
+  <rect x="30" y="68" width="240" height="16" rx="8" fill="rgba(125,140,160,0.08)" stroke="var(--border)"/>
+  <rect x="34" y="71" width="158" height="10" rx="5" fill="var(--accent)" opacity="0.9"/>
+  <rect x="220" y="71" width="46" height="10" rx="5" fill="#f5a524"/>
+  <line x1="206" y1="66" x2="206" y2="86" class="vdash"/>
+  <text x="113" y="103" text-anchor="middle" class="vsub" fill="var(--accent)">TRAIN · 30 d</text>
+  <text x="243" y="103" text-anchor="middle" class="vsub" fill="#f5a524">TEST · 1 wk</text>
+</svg></div>
             <span class="tid">T1</span>
             <h3>Intra-Building</h3>
             <p>Train and test on disjoint time segments from the same home — temporal generalization, the best-case baseline.</p>
             <div class="split">Train 30d B1 → test held-out 1 week, B1</div>
         </div>
         <div class="task-card">
+            <div class="task-viz"><svg viewBox="0 0 300 116" role="img" aria-label="Train on several homes, test on a different unseen home in the same dataset.">
+  <text x="150" y="13" text-anchor="middle" class="vlab">one dataset · unseen home</text>
+  <g class="hg hg-train" transform="translate(22,34) scale(1.1)"><path class="fillbody" d="M4,13 V27 H24 V13 Z"/><path d="M2,13 L14,3 L26,13 M4,13 V27 H24 V13 M11,27 V20 H17 V27"/></g><g class="hg hg-train" transform="translate(58,34) scale(1.1)"><path class="fillbody" d="M4,13 V27 H24 V13 Z"/><path d="M2,13 L14,3 L26,13 M4,13 V27 H24 V13 M11,27 V20 H17 V27"/></g>
+  <text x="56" y="100" text-anchor="middle" class="vsub" fill="var(--accent)">TRAIN · B1, B2</text>
+  <path d="M104,58 H168" class="varrow"/><path d="M162,53 L168,58 L162,63" class="varrow"/>
+  <text x="136" y="50" text-anchor="middle" class="vlab">generalize</text>
+  <g class="hg hg-test" transform="translate(188,30) scale(1.4)" stroke-dasharray="3 3"><path d="M2,13 L14,3 L26,13 M4,13 V27 H24 V13 M11,27 V20 H17 V27"/></g>
+  <circle cx="226" cy="36" r="9" fill="#f5a524"/><text x="226" y="40" text-anchor="middle" class="vq">?</text>
+  <text x="210" y="100" text-anchor="middle" class="vsub" fill="#f5a524">TEST · B4</text>
+</svg></div>
             <span class="tid">T2</span>
             <h3>Cross-Building</h3>
             <p>Train and test on different homes within a dataset. The realistic deployment test — and where most models break.</p>
             <div class="split">UK-DALE: B1,B2 → B4 &nbsp;·&nbsp; REDD: B1,B2,B3 → B6</div>
         </div>
         <div class="task-card">
+            <div class="task-viz"><svg viewBox="0 0 300 116" role="img" aria-label="Zero-shot transfer between datasets and grids: REDD USA and REFIT UK.">
+  <text x="150" y="13" text-anchor="middle" class="vlab">across datasets &amp; grids</text>
+  <g class="hg hg-train" transform="translate(22,34) scale(1.05)"><path class="fillbody" d="M4,13 V27 H24 V13 Z"/><path d="M2,13 L14,3 L26,13 M4,13 V27 H24 V13 M11,27 V20 H17 V27"/></g><g class="hg hg-train" transform="translate(56,34) scale(1.05)"><path class="fillbody" d="M4,13 V27 H24 V13 Z"/><path d="M2,13 L14,3 L26,13 M4,13 V27 H24 V13 M11,27 V20 H17 V27"/></g>
+  <text x="54" y="100" text-anchor="middle" class="vsub" fill="var(--accent)">REDD · USA · 110V</text>
+  <line x1="150" y1="28" x2="150" y2="92" class="vdash"/>
+  <g class="hg hg-test" transform="translate(206,34) scale(1.05)" stroke-dasharray="3 3"><path d="M2,13 L14,3 L26,13 M4,13 V27 H24 V13 M11,27 V20 H17 V27"/></g><g class="hg hg-test" transform="translate(240,34) scale(1.05)" stroke-dasharray="3 3"><path d="M2,13 L14,3 L26,13 M4,13 V27 H24 V13 M11,27 V20 H17 V27"/></g>
+  <text x="246" y="100" text-anchor="middle" class="vsub" fill="#f5a524">REFIT · UK · 230V</text>
+  <path d="M112,60 H188" class="varrow"/>
+  <path d="M118,55 L112,60 L118,65" class="varrow"/><path d="M182,55 L188,60 L182,65" class="varrow"/>
+  <text x="150" y="50" text-anchor="middle" class="vlab">zero-shot</text>
+</svg></div>
             <span class="tid">T3</span>
             <h3>Cross-Dataset</h3>
             <p>Zero-shot transfer across countries &amp; grids (110/230V). The hardest test — a symmetric, bidirectional collapse.</p>
