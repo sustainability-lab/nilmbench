@@ -2,393 +2,383 @@
 marp: true
 size: 16:9
 paginate: true
-footer: 'NILMBench2026 · BuildSys ’26'
+footer: 'NILMBench2026 — BuildSys 2026'
 math: katex
 ---
 
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Work+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
 
 :root{
-  --bg:#070a10; --bg2:#0c1018; --card:#11161f;
-  --tx:#eef2f7; --tx2:#a7b0be; --mut:#6a7484;
-  --acc:#2ee6a6; --acc2:#38bdf8; --amber:#f5a524; --red:#ef4444; --green:#22c55e; --blue:#38bdf8;
-  --bd:rgba(255,255,255,0.09);
-  --spectrum:linear-gradient(110deg,#3b82f6,#22d3ee,#22c55e,#f5a524,#ef4444);
+  --ink:#1b2330; --ink2:#48515e; --mut:#8b929c;
+  --acc:#c44536; --navy:#1b3b6f;
+  --line:#e6e8ec; --paper:#ffffff; --paper2:#f7f7f5;
 }
-
 section{
-  background:var(--bg); color:var(--tx);
-  font-family:'Inter',-apple-system,sans-serif; font-size:25px; line-height:1.5;
-  padding:62px 74px; letter-spacing:-0.01em;
+  background:var(--paper); color:var(--ink);
+  font-family:'Work Sans',sans-serif; font-size:23px; line-height:1.5;
+  padding:58px 78px;
 }
-section::before{ content:''; position:absolute; top:0; left:0; right:0; height:5px; background:var(--spectrum); }
-section::after{ color:var(--mut); font-family:'JetBrains Mono',monospace; font-size:14px; right:30px; }
-footer{ color:var(--mut); font-family:'JetBrains Mono',monospace; font-size:14px; opacity:.8; }
+section::after{ color:var(--mut); font-family:'Work Sans',sans-serif; font-size:13px; right:34px; }
+footer{ color:var(--mut); font-family:'Work Sans',sans-serif; font-size:13px; }
 
-h1{ font-family:'Sora',sans-serif; font-weight:800; font-size:52px; line-height:1.06; letter-spacing:-0.03em; margin:0 0 16px; border:none; padding:0; }
-h2{ font-family:'Sora',sans-serif; font-weight:700; font-size:40px; letter-spacing:-0.02em; margin:0 0 22px; padding-left:18px; border-left:5px solid var(--acc); }
-h3{ font-family:'Sora',sans-serif; font-weight:700; font-size:25px; margin:0 0 6px; }
-h4{ font-family:'JetBrains Mono',monospace; font-weight:600; font-size:15px; letter-spacing:.12em; text-transform:uppercase; color:var(--acc); margin:0 0 14px; }
-strong{ color:#fff; font-weight:700; }
+h1{ font-family:'Playfair Display',serif; font-weight:800; font-size:46px; color:var(--ink); margin:0 0 16px; letter-spacing:-0.01em; line-height:1.08; }
+h2{ font-family:'Playfair Display',serif; font-weight:700; font-size:37px; color:var(--ink); margin:0 0 24px; letter-spacing:-0.01em;
+    padding-bottom:14px; border-bottom:1px solid var(--line); position:relative; }
+h2::after{ content:''; position:absolute; left:0; bottom:-1px; width:62px; height:3px; background:var(--acc); }
+h3{ font-family:'Work Sans',sans-serif; font-weight:700; font-size:21px; margin:0 0 5px; color:var(--ink); }
+h4{ font-family:'Work Sans',sans-serif; font-weight:600; font-size:13px; letter-spacing:0.16em; text-transform:uppercase; color:var(--acc); margin:0 0 14px; }
+strong{ color:var(--ink); font-weight:700; }
 em{ color:var(--acc); font-style:normal; font-weight:600; }
 a{ color:var(--acc); text-decoration:none; }
+p{ margin:0 0 14px; }
 
 ul{ margin:6px 0; padding-left:0; list-style:none; }
-li{ margin:13px 0; padding-left:30px; position:relative; color:var(--tx2); }
-li strong{ color:var(--tx); }
-li::before{ content:''; position:absolute; left:0; top:12px; width:9px; height:9px; border-radius:2px; background:var(--acc); }
+li{ margin:13px 0; padding-left:26px; position:relative; color:var(--ink2); }
+li strong{ color:var(--ink); }
+li::before{ content:''; position:absolute; left:2px; top:11px; width:7px; height:7px; border-radius:50%; border:2px solid var(--acc); }
 
-code{ font-family:'JetBrains Mono',monospace; font-size:.82em; color:var(--acc); background:rgba(46,230,166,0.10); padding:2px 7px; border-radius:5px; }
-pre{ background:#0a0e15; border:1px solid var(--bd); border-radius:12px; padding:20px 24px; font-size:18.5px; line-height:1.65; box-shadow:0 16px 40px rgba(0,0,0,.4); }
-pre code{ background:none; color:#cdd6e4; padding:0; font-size:1em; }
+code{ font-family:'JetBrains Mono',monospace; font-size:.82em; color:var(--navy); background:#eef1f5; padding:2px 6px; border-radius:4px; }
+pre{ background:#f6f7f9; border:1px solid var(--line); border-radius:10px; padding:18px 22px; font-size:17px; line-height:1.65; }
+pre code{ background:none; color:var(--ink); padding:0; font-size:1em; }
+.hljs-keyword,.hljs-built_in,.hljs-meta{ color:var(--acc); }
+.hljs-string{ color:#1f7a4d; }
+.hljs-comment{ color:#9aa1ac; font-style:italic; }
+.hljs-number,.hljs-literal{ color:var(--navy); }
+.hljs-title,.hljs-class .hljs-title,.hljs-title.class_,.hljs-title.function_{ color:#9a5b00; }
 
-table{ border-collapse:collapse; font-size:21px; width:100%; }
-th{ background:rgba(46,230,166,0.07); color:var(--tx); font-family:'Sora',sans-serif; font-weight:600; padding:11px 16px; text-align:left; border-bottom:2px solid var(--acc); }
-td{ padding:10px 16px; border-bottom:1px solid var(--bd); color:var(--tx2); font-variant-numeric:tabular-nums; }
+table{ border-collapse:collapse; font-size:19px; width:100%; }
+th{ font-family:'Work Sans',sans-serif; font-weight:600; color:var(--ink); padding:10px 14px; text-align:left;
+    border-bottom:2px solid var(--ink); font-size:13.5px; text-transform:uppercase; letter-spacing:0.05em; }
+td{ padding:9px 14px; border-bottom:1px solid var(--line); color:var(--ink2); }
 tr:last-child td{ border-bottom:none; }
 td strong{ color:var(--acc); }
 
-img{ display:block; margin:0 auto; border-radius:12px; }
+img{ display:block; margin:0 auto; }
 
-.cols{ display:flex; gap:26px; align-items:flex-start; }
+.cols{ display:flex; gap:30px; align-items:flex-start; }
 .col{ flex:1; }
-.vc{ display:flex; align-items:center; gap:30px; }
-.card{ background:var(--card); border:1px solid var(--bd); border-radius:14px; padding:20px 22px; }
-.card.acc{ border-left:4px solid var(--acc); }
-.kpis{ display:flex; gap:18px; text-align:center; margin-top:8px; }
-.kpi .n{ font-family:'Sora',sans-serif; font-weight:800; font-size:54px; line-height:1; background:linear-gradient(120deg,#2ee6a6,#38bdf8); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
-.kpi .l{ color:var(--mut); font-size:16px; margin-top:6px; }
-.muted{ color:var(--mut); font-size:18px; }
-.big{ font-family:'Sora',sans-serif; font-weight:800; font-size:38px; color:var(--tx); letter-spacing:-0.02em; }
-.tag{ display:inline-block; font-family:'JetBrains Mono',monospace; font-size:15px; font-weight:600; padding:5px 11px; border-radius:7px; margin:3px 2px; }
-.tag.new{ background:var(--acc); color:#04140d; }
-.tag.old{ background:rgba(255,255,255,0.05); color:var(--tx2); border:1px solid var(--bd); }
-.lead-note{ color:var(--tx2); font-size:23px; }
-.pill{ display:inline-block; font-family:'JetBrains Mono',monospace; font-size:15px; padding:5px 13px; border-radius:100px; border:1px solid var(--bd); color:var(--tx2); }
+.vc{ display:flex; align-items:center; gap:34px; }
+.note{ color:var(--mut); font-size:17px; }
+.kpis{ display:flex; gap:0; margin:10px 0 22px; }
+.kpi{ flex:1; padding:0 18px; border-left:1px solid var(--line); }
+.kpi:first-child{ border-left:none; padding-left:0; }
+.kpi .n{ font-family:'Playfair Display',serif; font-weight:800; font-size:52px; color:var(--ink); line-height:1; }
+.kpi .n em{ color:var(--acc); }
+.kpi .l{ color:var(--ink2); font-size:16px; margin-top:8px; }
+.lead{ font-size:25px; color:var(--ink2); max-width:90%; }
+.lead strong{ color:var(--ink); }
 
-/* title slide */
-section.title{ display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; padding-top:40px; }
-section.title h1{ font-size:104px; margin-bottom:6px; background:var(--spectrum); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; letter-spacing:-0.04em; border:none; padding:0; }
-section.title .sub{ font-family:'Sora',sans-serif; font-weight:600; font-size:32px; color:var(--tx); margin-bottom:30px; }
-section.title .badges{ margin-bottom:34px; }
-section.title .badges .b{ display:inline-block; font-family:'JetBrains Mono',monospace; font-size:16px; font-weight:600; padding:8px 18px; border-radius:100px; margin:0 6px; }
-section.title .b.conf{ border:1px solid var(--bd); color:var(--tx2); }
-section.title .b.award{ background:linear-gradient(120deg,#ffd55e,#f5a524); color:#1a1305; }
-section.title .auth{ font-size:26px; color:var(--tx); margin-bottom:4px; }
-section.title .auth .mk{ color:var(--acc); font-size:.7em; vertical-align:super; }
-section.title .aff{ color:var(--mut); font-size:20px; margin-bottom:28px; }
-section.title .links{ font-family:'JetBrains Mono',monospace; font-size:18px; color:var(--acc); }
+.stage{ display:flex; align-items:stretch; gap:0; margin-top:18px; }
+.stage .s{ flex:1; padding:16px 14px; border-top:3px solid var(--line); }
+.stage .s.on{ border-top-color:var(--acc); }
+.stage .s .y{ font-family:'JetBrains Mono',monospace; font-size:14px; color:var(--mut); }
+.stage .s .t{ font-weight:600; font-size:18px; color:var(--ink); margin-top:3px; }
+.stage .s .d{ font-size:14.5px; color:var(--ink2); margin-top:3px; }
 
-/* section divider */
+.callout{ background:var(--paper2); border:1px solid var(--line); border-left:3px solid var(--acc); border-radius:8px; padding:16px 20px; font-size:20px; color:var(--ink2); }
+.callout strong{ color:var(--ink); }
+
+section.title{ text-align:center; padding-top:62px; }
+section.title .logo{ height:38px; margin:0 auto 30px; opacity:.9; }
+section.title h1{ font-size:78px; margin-bottom:10px; }
+section.title .rule{ width:90px; height:3px; background:var(--acc); margin:0 auto 22px; }
+section.title .sub{ font-family:'Playfair Display',serif; font-style:italic; font-size:27px; color:var(--ink2); margin-bottom:34px; }
+section.title .auth{ font-size:23px; color:var(--ink); font-weight:600; }
+section.title .mail{ font-family:'JetBrains Mono',monospace; font-size:14px; color:var(--mut); margin:8px 0 22px; }
+section.title .aff{ font-size:18px; color:var(--ink2); }
+section.title .conf{ font-size:17px; color:var(--mut); margin-top:6px; }
+section.title .conf b{ color:var(--acc); font-weight:600; }
+
 section.sec{ display:flex; flex-direction:column; justify-content:center; }
-section.sec h4{ font-size:17px; }
-section.sec h1{ font-size:64px; border:none; padding:0; max-width:90%; }
-section.sec .big{ font-size:30px; color:var(--tx2); font-family:'Inter'; font-weight:400; margin-top:14px; max-width:80%; }
+section.sec h1{ font-size:60px; max-width:88%; }
+section.sec .k{ font-size:24px; color:var(--ink2); max-width:78%; margin-top:6px; }
 
-/* finding accent number */
-.fnum{ font-family:'Sora',sans-serif; font-weight:800; font-size:30px; color:var(--acc); }
+.cap{ font-size:16px; color:var(--mut); text-align:center; margin-top:10px; }
 </style>
 
 <!-- _class: title -->
 <!-- _paginate: false -->
 <!-- _footer: '' -->
 
-<img src="figs/wordmark.png" width="800" alt="NILMBench2026" style="margin:0 auto 6px">
+<img class="logo" src="figs/lab_logo.png" alt="Sustainability Lab">
 
+# NILMBench2026
 
-<div class="sub">A Benchmark for Energy Disaggregation</div>
+<div class="rule"></div>
 
-<div class="badges">
-<span class="b conf">● BuildSys ’26 · Banff, Canada</span>
-<span class="b award">★ Best Paper Candidate</span>
-</div>
+<div class="sub">A deployment-aware benchmark for energy disaggregation</div>
 
-<div class="auth">Aayush Kuloor<span class="mk">*</span> &nbsp; Anurag Singh<span class="mk">*</span> &nbsp; Harsh Dhru<span class="mk">*</span> &nbsp; Nipun Batra<span class="mk">†</span></div>
-<div class="aff">IIT Gandhinagar &nbsp;·&nbsp; * equal contribution &nbsp; † corresponding author</div>
-
-<div class="links">github.com/sustainability-lab/nilmbench&nbsp;&nbsp;·&nbsp;&nbsp;sustainability-lab.github.io/nilmbench</div>
+<div class="auth">Aayush Kuloor* &nbsp;·&nbsp; Anurag Singh* &nbsp;·&nbsp; Harsh Dhru* &nbsp;·&nbsp; Nipun Batra</div>
+<div class="mail">{aayush.kuloor, anurag.s, harsh.dhru, nipun.batra}@iitgn.ac.in</div>
+<div class="aff">Indian Institute of Technology Gandhinagar</div>
+<div class="conf">ACM BuildSys 2026 · Banff, Canada &nbsp;|&nbsp; <b>Best Paper Candidate</b> &nbsp;|&nbsp; *equal contribution</div>
 
 ---
 
-## What is energy disaggregation?
+## What is NILM, and why does it matter?
 
-<div class="lead-note">One aggregate household power signal in &nbsp;→&nbsp; appliance-level estimates out. Fine-grained feedback can cut consumption by up to <strong style="color:var(--acc)">15%</strong>.</div>
+<div class="vc">
+<div style="flex:1.25">
 
-![w:980](figs/disaggregation.png)
+Non-Intrusive Load Monitoring (NILM) converts a **single smart-meter signal**
+into **appliance-level** consumption estimates.
 
-$$ y_t = \textstyle\sum_{i=1}^{N} x_{i,t} + \epsilon_t \qquad\text{\small(aggregate = sum of appliances + noise \& unmetered loads)} $$
+$$ y_t = \sum_{i=1}^{N} x_{i,t} + \epsilon_t $$
 
----
-
-<!-- _class: sec -->
-
-#### The problem
-
-# Lots of models. No reproducible yardstick.
-
-<div class="big">Architectures keep improving — but we can't fairly compare them, and we don't know if they'll <em>survive deployment</em>.</div>
-
----
-
-## What prior benchmarks miss
-
-<div class="cols">
-<div class="col">
-
-- **Efficiency ignored** — accuracy reported, but not FLOPs, parameters, or inference time
-- **One resolution** — usually 1-min only; ignores utility-scale 15-min
-- **Generalization untested** — rarely evaluated across buildings or datasets
-- **Fragmented code** — Python 2.7, TensorFlow 1.x; gains conflated with implementation luck
+- **Why it matters:** appliance-level feedback can reduce household consumption by up to **15%** — without installing a sensor on every device
+- It is a hard **inverse problem**: appliance signatures vary across homes, making it a domain-adaptation challenge
 
 </div>
-<div class="col">
+<div style="flex:1">
+<img src="figs/disaggregation_teaser.png" height="430">
+<div class="cap">UK-DALE: aggregate mains disaggregated into appliances</div>
+</div>
+</div>
 
-| Feature | '14 | '19 | **Ours** |
-|---|:--:|:--:|:--:|
-| Deployability | ✗ | ✗ | **uv+Docker** |
+---
+
+## Appliance signatures make disaggregation possible
+
+<img src="figs/appliance_signatures.png" width="940">
+
+<div class="note" style="text-align:center; margin-top:8px">Each appliance has a distinct electrical fingerprint — periodic (fridge), multi-stage (washing machine), or sparse and high-power (dishwasher).</div>
+
+---
+
+## The evolution of NILM
+
+<div class="stage">
+<div class="s"><div class="y">1980s–90s</div><div class="t">Combinatorial</div><div class="d">Hart's edge detection &amp; optimization</div></div>
+<div class="s"><div class="y">2000s</div><div class="t">Probabilistic</div><div class="d">Factorial Hidden Markov Models</div></div>
+<div class="s on"><div class="y">2015 →</div><div class="t">Deep learning</div><div class="d">CNNs, RNNs (Kelly &amp; Knottenbelt)</div></div>
+<div class="s on"><div class="y">2020 →</div><div class="t">Transformers</div><div class="d">Long-range attention (NILMFormer)</div></div>
+</div>
+
+<br>
+
+<div class="callout">As models grew more capable, evaluation did not keep pace. Benchmarking had to move <strong>beyond accuracy</strong> — to efficiency, resolution, and generalization.</div>
+
+---
+
+## What previous benchmarks missed
+
+| Capability | NILMTK 2014 | Contrib 2019 | NILMBench2026 |
+|---|---|---|---|
 | Models | 2 | 9 | **16** |
-| Resolutions | var | 1m | **1m & 15m** |
-| Efficiency | ✗ | ✗ | **✓** |
-| Cross-building | ✗ | ✓ | ✓ |
-| Cross-dataset | ✗ | ✗ | **✓** |
-| Stack | Py2.7 | TF1 | **PyTorch** |
+| Temporal resolutions | variable | 1 min | **1 min and 15 min** |
+| Efficiency metrics | — | — | **FLOPs, params, time** |
+| Cross-building test | — | yes | yes |
+| Cross-dataset transfer | — | — | **yes** |
+| Software stack | Python 2.7 | TensorFlow 1.x | **PyTorch + Docker + uv** |
 
-</div>
-</div>
+<div class="callout" style="margin-top:22px">Our contribution is a <strong>deployment stress test</strong> — not just another accuracy leaderboard.</div>
 
 ---
 
-## NILMBench2026
+## NILMBench2026 at a glance
 
 <div class="kpis">
-<div class="kpi"><div class="n">16</div><div class="l">models</div></div>
-<div class="kpi"><div class="n">3</div><div class="l">datasets</div></div>
-<div class="kpi"><div class="n">2</div><div class="l">resolutions</div></div>
-<div class="kpi"><div class="n">3</div><div class="l">tasks</div></div>
-<div class="kpi"><div class="n">576</div><div class="l">configs ×3 runs</div></div>
+<div class="kpi"><div class="n"><em>16</em></div><div class="l">models<br>classical → Transformer</div></div>
+<div class="kpi"><div class="n"><em>3</em></div><div class="l">datasets<br>REDD · UK-DALE · REFIT</div></div>
+<div class="kpi"><div class="n"><em>2</em></div><div class="l">resolutions<br>1-min &amp; 15-min</div></div>
+<div class="kpi"><div class="n"><em>576</em></div><div class="l">configurations<br>16 × 3 × 2 × 6, ×3 runs</div></div>
 </div>
 
-<br>
-
-- A **reproducible, deployment-aware** benchmark across accuracy, efficiency & generalization
-- We **modernize NILMTK**: every legacy model re-implemented in **PyTorch** under one API
-- One-command reproducibility with **`uv`** + **Docker**, and **+5** modern architectures
+<div class="callout"><strong>Evaluation philosophy.</strong> A deployable NILM model must be <strong>accurate</strong>, <strong>event-aware</strong>, <strong>transferable</strong>, and <strong>efficient</strong> — so we measure all four.</div>
 
 ---
 
-## Reproduce every result in 3 commands
-
-```bash
-# install the modernized stack — 16 models, one PyTorch API
-uv pip install "nilmtk-contrib[torch] @ git+https://github.com/sustainability-lab/nilmbench.git"
-# …or a pinned, GPU-ready container
-docker run --gpus all ghcr.io/sustainability-lab/nilmtk-contrib:latest bash
-```
-
-```python
-from nilmtk.api import API
-from nilmtk_contrib.torch import NILMFormer, Seq2PointTorch, TCN
-
-experiment['methods'] = {'NILMFormer': NILMFormer({'n_epochs': 50}), ...}
-results = API(experiment)     # trains, tests & scores every model
-```
-
-<div class="muted">Adding a model = subclass <code>Disaggregator</code>. Adding a metric = one function. Same harness for everyone.</div>
-
----
-
-## Datasets — two countries, two grids
-
-| Dataset | Country | Buildings | Duration | Appliances |
-|---|---|:--:|:--:|:--:|
-| **REDD** | 🇺🇸 USA (110 V) | 6 | 3–19 days | 10–20 |
-| **UK-DALE** | 🇬🇧 UK (230 V) | 5 | 655 days | 5–54 |
-| **REFIT** | 🇬🇧 UK (230 V) | 20 | 2 years | 9–21 |
-
-<div class="muted" style="margin-top:18px">Six appliances spanning NILM difficulty: <span class="pill">Fridge</span> <span class="pill">Microwave</span> <span class="pill">Kettle</span> <span class="pill">Washing Machine</span> <span class="pill">Dish Washer</span> <span class="pill">Television</span> &nbsp;·&nbsp; excluded: single-building (AMPds, iAWE…) & pay-walled (PecanStreet)</div>
-
----
-
-## 16 architectures, 4 families
+## A modern, reproducible software stack
 
 <div class="cols">
 <div class="col">
 
-#### Recurrent & Hybrid
-<span class="tag old">RNN</span><span class="tag old">WindowGRU</span><span class="tag new">ConvLSTM</span><span class="tag old">RNN-Attn</span><span class="tag old">RNN-Attn-Cl</span>
-
-#### Fully Convolutional
-<span class="tag old">Seq2Point</span><span class="tag old">Seq2Seq</span><span class="tag new">TCN</span><span class="tag old">ResNet</span><span class="tag old">ResNet-Cl</span>
+#### Before
+- Legacy TensorFlow / Keras implementations
+- Environment drift across papers
+- One-off model wrappers
+- Accuracy-first reporting
 
 </div>
 <div class="col">
 
-#### Transformer-Based
-<span class="tag old">BERT</span><span class="tag new">Reformer</span><span class="tag new">NILMFormer</span>
-
-#### Specialized NILM
-<span class="tag old">DAE</span><span class="tag new">MSDC</span>
+#### Now
+- Standardized **PyTorch** implementations
+- **Docker** and **uv** reproducibility
+- A common **NILMTK-compatible** experiment API
+- Accuracy, **event detection**, and **compute** metrics
 
 </div>
 </div>
 
-<br>
-
-<div class="muted"><span class="tag new" style="font-size:13px">green</span> = the <strong style="color:var(--acc)">5 architectures we add</strong> in NILMBench2026 (TCN, ConvLSTM, MSDC, Reformer, NILMFormer)</div>
+```bash
+uv pip install "nilmtk-contrib[torch] @ git+https://github.com/sustainability-lab/nilmbench.git"
+```
 
 ---
 
-## Three tasks — increasing realism
+## Systematic evaluation: three tasks
 
 <div class="cols">
 <div class="col">
 <img src="figs/task_t1.png" width="330">
-<h3>T1 · Intra-Building</h3>
-<div class="muted">Same home, train past → test held-out week. Best case.</div>
+<h3>T1 — Same building</h3>
+<div class="note">Disjoint time windows from one home. A best-case baseline.</div>
 </div>
 <div class="col">
 <img src="figs/task_t2.png" width="330">
-<h3>T2 · Cross-Building</h3>
-<div class="muted">Unseen home, <strong>same country</strong>. The realistic test.</div>
+<h3>T2 — New building</h3>
+<div class="note">Unseen home, same dataset. Deployment within a region.</div>
 </div>
 <div class="col">
 <img src="figs/task_t3.png" width="330">
-<h3>T3 · Cross-Dataset</h3>
-<div class="muted">Zero-shot, <strong>different country & grid</strong>. Hardest.</div>
+<h3>T3 — New dataset</h3>
+<div class="note">Train in one country, test in another. Zero-shot domain shift.</div>
 </div>
 </div>
 
 ---
 
-<!-- _class: sec -->
+## Datasets
 
-#### Finding 1
+| Dataset | Country | Buildings | Duration | Appliances |
+|---|---|---|---|---|
+| **REDD** | USA — 110 V | 6 | 3–19 days | 10–20 |
+| **UK-DALE** | UK — 230 V | 5 | 655 days | 5–54 |
+| **REFIT** | UK — 230 V | 20 | 2 years | 9–21 |
 
-# No single model wins.
+Six appliances span the difficulty range: **fridge, microwave, kettle, washing machine, dishwasher, television**.
 
-<div class="big">Performance is highly <em>context-dependent</em> — the best architecture changes with appliance type and time resolution.</div>
-
-<br>
-
-- **1-min:** deep CNNs (Seq2Point, TCN) capture sharp activation transients
-- **15-min:** averaging erases detail — NILMFormer's attention & exogenous priors win
-- CNNs excel at sparse bursts; Transformers handle complex multi-state loads
+<div class="note">Single-building (AMPds, iAWE, BLUED, DRED) and pay-walled (PecanStreet) datasets are excluded — they cannot support cross-building or cross-dataset evaluation.</div>
 
 ---
 
-## Finding 2 — generalization is the wall
+## Finding 1 — Generalization is the bottleneck
 
 <div class="vc">
 <div style="flex:1.05">
 
-- Accuracy **collapses** from T1 → T2 → T3, symmetrically in both transfer directions
-- Models memorize **one device's electrical fingerprint** — not the abstract appliance
-- Right: NILMFormer on a TV — tracks the *trained* set (bottom), **fails** on an unseen TV (top)
+Accuracy degrades sharply from **T1 → T2 → T3**, symmetrically in both transfer directions.
 
-<div class="card acc" style="margin-top:14px">The drop from same-building to unseen-building is the <strong>core barrier to real-world NILM</strong>.</div>
+- Models learn a **home-specific signature**, not a transferable appliance concept
+- Right: NILMFormer tracks a television it was trained on (lower), but **fails on an unseen one** (upper)
+
+<div class="callout" style="margin-top:14px">The same-building to unseen-building drop is the <strong>core barrier to real-world NILM</strong>.</div>
 
 </div>
 <div style="flex:.95">
-<img src="figs/generalization_failure.png" height="470">
+<img src="figs/generalization_failure.png" height="450">
 </div>
 </div>
 
 ---
 
-## Finding 3 — MAE is misleading
+## Finding 2 — MAE hides missed appliance events
 
-<div class="lead-note">On sparse loads, a model scores a low MAE by always predicting <em>“off”</em> — while missing <strong>every</strong> activation.</div>
+<img src="figs/microwave_miss.png" width="780">
 
-![w:760](figs/microwave_miss.png)
-
-<div class="muted">REFIT microwave (cross-building): four models miss every 1200 W spike, yet look “accurate” by MAE. <strong>Event metrics (F1) are essential.</strong></div>
+<div class="note" style="text-align:center; margin-top:6px">REFIT microwave (cross-building): all four models miss every high-power activation, yet report a low MAE by predicting near-zero. A near-zero prediction can look acceptable in MAE while missing every event — so we also report <strong style="color:var(--ink)">F1</strong>.</div>
 
 ---
 
-## Finding 4 — efficiency ≠ accuracy
+## Finding 3 — More compute does not guarantee better NILM
+
+<div class="vc">
+<div style="flex:1.2">
+<img src="figs/efficiency.png" width="640">
+</div>
+<div style="flex:.8">
+
+The accuracy–compute trade-off is **non-monotonic**.
+
+- **TCN** — 69K params — is competitive with far larger models
+- **NILMFormer** — 383K params — is strongest overall
+- **RNN Att. Cl.** — 4.94M params — is expensive *and* worse
+
+<div class="note" style="margin-top:10px">Architectural inductive bias matters more than raw model size.</div>
+
+</div>
+</div>
+
+---
+
+## How a researcher can contribute
 
 <div class="cols">
 <div class="col">
 
-The accuracy–compute trade-off is **non-monotonic**. Architectural inductive bias beats raw compute.
+```python
+from nilmtk.disaggregate import Disaggregator
 
-- **TCN** — just **69K params** — rivals the heavyweight NILMFormer on cross-dataset tasks
-- Smallest models consistently *under*-perform; biggest aren't the best
-- Real deployment likely needs an **ensemble** of specialists
+class MyNILM(Disaggregator):
+    def partial_fit(self, mains, appliances): ...
+    def disaggregate_chunk(self, mains): ...
+
+experiment['methods']['MyNILM'] = MyNILM({})
+```
+
+```python
+# nilmtk/losses.py — define once
+def sae(gt, pred):
+    return abs(pred.sum() - gt.sum()) / gt.sum()
+experiment['test']['metrics'] += ['sae']
+```
 
 </div>
 <div class="col">
 
-| Model | MAE↓ | GFLOPs | Params |
-|---|:--:|:--:|:--:|
-| NILMFormer | **15.4** | 135 | 383K |
-| Seq2Point | 18.4 | 72 | 3.6M |
-| **TCN** | 20.8 | **20** | **69K** |
-| BERT | 23.7 | **5.4** | 803K |
+A **new algorithm** is one class; a **new metric** is one function.
 
-<div class="muted">T2 cross-building (UK-DALE), mean MAE.</div>
+- The same frozen splits and pre-processing apply to every entry
+- Reported gains reflect **architecture**, not implementation differences
+- Results are directly comparable on a shared, open leaderboard
+
+<div class="callout" style="margin-top:14px">NILMBench2026 turns new algorithms and datasets into <strong>comparable results</strong>, quickly.</div>
 
 </div>
 </div>
 
 ---
 
-## Four takeaways
+## NILMBench2026: a foundation for deployment
 
 <div class="cols">
 <div class="col">
-<div class="card" style="margin-bottom:18px"><h3>🏆 No single model wins</h3><div class="muted">Best architecture depends on the appliance signature — CNNs for bursts, Transformers for multi-state.</div></div>
-<div class="card"><h3>🎭 MAE is misleading</h3><div class="muted">Predicting “off” hides missed events. Report F1 for sparse loads.</div></div>
+
+#### Benchmark
+16 models · 3 datasets · 2 resolutions · 576 configurations
+
+#### Key finding
+Generalization — not accuracy — is the main bottleneck
+
 </div>
 <div class="col">
-<div class="card" style="margin-bottom:18px"><h3>🧱 Generalization is the hurdle</h3><div class="muted">Models fail on unseen buildings & datasets — the barrier to adoption.</div></div>
-<div class="card"><h3>⚖️ Efficiency ≠ accuracy</h3><div class="muted">Non-monotonic: a 69K-param TCN rivals heavyweights.</div></div>
+
+#### Platform
+PyTorch + Docker + uv + the NILMTK API
+
+#### Next
+Domain adaptation · self-supervised pre-training · edge-ready NILM
+
 </div>
+</div>
+
+<br>
+
+<div class="callout">
+<strong>Code &amp; project page:</strong> github.com/sustainability-lab/nilmbench &nbsp;·&nbsp; sustainability-lab.github.io/nilmbench
 </div>
 
 ---
 
 <!-- _class: sec -->
-
-#### A living benchmark
-
-# Built to become NILM’s ImageNet.
-
-<div class="big">ImageNet moved vision. GLUE moved language. NILM has never had a shared, sealed, <em>generalization-first</em> leaderboard — until now.</div>
-
-<br>
-
-- **Add a model** in one class · **add a metric** in one function · same frozen harness
-- Submit to a public, OOD-first **leaderboard** — currently led by NILMFormer (T2 MAE 15.4)
-- Toward an annual **NILM Challenge** in the spirit of the KDD Cup
-
----
-
-## Conclusion
-
-<div class="lead-note">NILMBench2026 evaluates <strong>16 models × 3 datasets × 2 resolutions</strong> on accuracy, efficiency & generalization — and ships the reproducible platform to keep doing so.</div>
-
-<br>
-
-- **Generalization is the prerequisite** for deploying NILM at scale — not marginal accuracy
-- No universal model; MAE misleads on sparse loads; efficiency is decoupled from accuracy
-- **Next:** domain adaptation · self-supervised pre-training · adaptive denormalization · community leaderboards
-
----
-
-<!-- _class: title -->
 <!-- _paginate: false -->
 
-<img src="figs/thankyou.png" width="430" alt="Thank you" style="margin:0 auto 2px">
+# Thank you.
 
+<div class="k">Generalization is the bottleneck for real-world NILM. NILMBench2026 is the reproducible platform to measure — and close — that gap.</div>
 
-<div class="sub">Generalization is the wall. Let’s tear it down — together.</div>
+<br>
 
-<div class="auth" style="margin-top:10px">Aayush Kuloor · Anurag Singh · Harsh Dhru · Nipun Batra</div>
-<div class="aff">nipun.batra@iitgn.ac.in &nbsp;·&nbsp; IIT Gandhinagar</div>
-
-<div class="links" style="margin-top:24px">
-📄 sustainability-lab.github.io/nilmbench<br>
-💻 github.com/sustainability-lab/nilmbench
-</div>
+<div class="note">nipun.batra@iitgn.ac.in &nbsp;·&nbsp; Sustainability Lab, IIT Gandhinagar &nbsp;·&nbsp; sustainability-lab.github.io/nilmbench</div>
