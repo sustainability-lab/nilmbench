@@ -66,6 +66,147 @@ uv sync --extra dev --extra classical
 uv sync --extra dev --extra all
 ```
 
+### Verify your install
+
+After `uv sync --extra dev`, run a quick sanity check to confirm the package and core tests are in good shape:
+
+```bash
+uv run python -m compileall -q nilmtk_contrib tests
+uv run python -m pytest -q tests/test_imports.py tests/test_params.py tests/test_preprocessing_windows.py tests/test_preprocessing_alignment.py tests/test_preprocessing_classification.py tests/test_validation.py tests/test_checkpoints.py tests/test_random_logging.py tests/test_model_runtime.py
+```
+
+Before launching full experiments, smoke-test the backend you plan to use. Sync the matching extra and run the full test suite—for example, with PyTorch:
+
+```bash
+uv sync --extra dev --extra torch
+uv run python -m pytest -q
+```
+
+## Docker
+
+The repository ships a reproducible container image based on Python 3.11 (Debian Bookworm). The image installs `nilmtk-contrib` with `uv`, pins the Python runtime, and bundles the system libraries needed for NumPy, SciPy, scikit-learn, TensorFlow, and PyTorch.
+
+### Prerequisites
+
+- [Docker](https://docs.docker.com/get-docker/) 24+ (Docker Desktop on Windows/macOS is fine).
+- Optional GPU support: [NVIDIA Container Toolkit](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/install-guide.html) if you plan to pass `--gpus all`.
+
+### Build locally
+
+Default all-backend image:
+
+```bash
+docker build -t nilmtk-contrib:all .
+```
+
+Backend-specific images (smaller, faster builds):
+
+```bash
+docker build -t nilmtk-contrib:torch --build-arg INSTALL_EXTRA=torch .
+docker build -t nilmtk-contrib:tensorflow --build-arg INSTALL_EXTRA=tensorflow .
+docker build -t nilmtk-contrib:classical --build-arg INSTALL_EXTRA=classical .
+```
+
+Image with dev/test dependencies:
+
+```bash
+docker build -t nilmtk-contrib:dev --build-arg INSTALL_DEV=true .
+```
+
+### Run interactively
+
+```bash
+docker run --rm -it nilmtk-contrib:all bash
+```
+
+Mount a local dataset directory (read-only) at `/data`:
+
+```bash
+docker run --rm -it -v /path/to/datasets:/data:ro nilmtk-contrib:all bash
+```
+
+On Windows PowerShell, use a drive path such as `-v C:/Users/you/datasets:/data:ro`.
+
+GPU-enabled shell (requires NVIDIA Container Toolkit):
+
+```bash
+docker run --rm -it --gpus all nilmtk-contrib:all bash
+```
+
+Inside the container, verify CUDA visibility for PyTorch:
+
+```bash
+python -c "import torch; print('cuda:', torch.cuda.is_available())"
+```
+
+### Verify the image
+
+Quick package and backend checks:
+
+```bash
+docker run --rm nilmtk-contrib:all python -c "import nilmtk_contrib; print(nilmtk_contrib.__version__)"
+docker run --rm nilmtk-contrib:all python -c "import nilmtk_contrib.disaggregate, nilmtk_contrib.torch; print('imports ok')"
+docker run --rm nilmtk-contrib:all python -c "import nilmtk, torch, tensorflow as tf; print('nilmtk ok'); print('torch', torch.__version__); print('tensorflow', tf.__version__)"
+```
+
+Compile and run the lightweight test subset (requires the dev image):
+
+```bash
+docker build -t nilmtk-contrib:dev --build-arg INSTALL_DEV=true .
+docker run --rm nilmtk-contrib:dev python -m compileall -q nilmtk_contrib tests
+docker run --rm nilmtk-contrib:dev python -m pytest -q \
+  tests/test_imports.py \
+  tests/test_params.py \
+  tests/test_preprocessing_windows.py \
+  tests/test_preprocessing_alignment.py \
+  tests/test_preprocessing_classification.py \
+  tests/test_validation.py \
+  tests/test_checkpoints.py \
+  tests/test_random_logging.py \
+  tests/test_model_runtime.py
+```
+
+One-shot smoke test after building the default image:
+
+```bash
+docker run --rm nilmtk-contrib:all bash -lc "python -c \"import nilmtk_contrib; import torch; import tensorflow as tf; print('nilmtk-contrib', nilmtk_contrib.__version__); print('torch', torch.__version__); print('tensorflow', tf.__version__)\""
+```
+
+### Pull the pre-built image
+
+```bash
+docker pull ghcr.io/sustainability-lab/nilmtk-contrib:latest
+docker run --rm -it ghcr.io/sustainability-lab/nilmtk-contrib:latest bash
+```
+
+Backend-specific tags:
+
+```bash
+docker pull ghcr.io/sustainability-lab/nilmtk-contrib:torch
+docker pull ghcr.io/sustainability-lab/nilmtk-contrib:tensorflow
+docker pull ghcr.io/sustainability-lab/nilmtk-contrib:classical
+```
+
+GPU-enabled pre-built image:
+
+```bash
+docker run --rm -it --gpus all ghcr.io/sustainability-lab/nilmtk-contrib:latest bash
+```
+
+### Docker build arguments
+
+| Argument | Default | Allowed values | Purpose |
+|---|---|---|---|
+| `INSTALL_EXTRA` | `all` | `all`, `torch`, `tensorflow`, `classical` | Optional dependency extra to install |
+| `INSTALL_DEV` | `false` | `true`, `false` | Also install `.[dev]` for pytest and tooling |
+
+### Files
+
+| File | Purpose |
+|---|---|
+| `Dockerfile` | Multi-backend image definition with build args |
+| `.dockerignore` | Keeps build context small and excludes local artifacts |
+
 ## Dependency Extras
 
 | Extra | Intended use | Main dependencies |
@@ -113,33 +254,6 @@ The table below lists the public model surface. "Verification" describes how the
 | MSDC without CRF | PyTorch | `nilmtk_contrib.torch.msdc_without_crf.MSDC` | MSDC ablation | MSDC paper/source implementation | No-CRF ablation, not the canonical MSDC path |
 | NILMFormer | PyTorch | `nilmtk_contrib.torch.NILMFormer` | NILMFormer implementation requiring experiment validation for new claims | Petralia et al., NILMFormer | PyTorch backend |
 
-## Research Use And Reproducibility
-
-Use the model table to choose the correct backend and citation. Cite NILMBench2026 for the benchmark, modernized toolkit, experiment protocol, and reported cross-model comparisons. Generic architecture papers support architecture inspiration only; they should not be cited as NILM-specific evidence by themselves.
-
-For reproducible experiments:
-
-- Record the Python version, package extras, dataset, building, appliance list, sampling period, random seed, and hardware.
-- Record the benchmark task, temporal resolution, model backend, and NILMBench2026 configuration used for each run.
-- Run backend-specific smoke tests before running full experiments.
-- Verify TensorFlow/PyTorch parity before comparing paired implementations.
-- Verify model output lengths and indices before computing NILMTK metrics.
-- Treat notebook outputs as historical examples unless rerun in the current environment.
-
-Recommended fast checks for source validation (after `uv sync --extra dev`):
-
-```bash
-uv run python -m compileall -q nilmtk_contrib tests
-uv run python -m pytest -q tests/test_imports.py tests/test_params.py tests/test_preprocessing_windows.py tests/test_preprocessing_alignment.py tests/test_preprocessing_classification.py tests/test_validation.py tests/test_checkpoints.py tests/test_random_logging.py tests/test_model_runtime.py
-```
-
-Backend smoke checks should be run in environments with the corresponding extras by importing the target model classes and running small dataset-specific training or prediction jobs before launching full experiments. For example:
-
-```bash
-uv sync --extra dev --extra torch
-uv run python -m pytest -q
-```
-
 ## Reference Papers And Codebases
 
 NILM-specific references:
@@ -181,24 +295,6 @@ Supported experiment workflows include:
 - Training and testing across multiple buildings.
 - Training and testing with artificial aggregate.
 - Training and testing with different sampling frequencies.
-
-## Docker
-
-Build and run locally:
-
-```bash
-docker build -t nilmtk-contrib .
-docker run --rm -it nilmtk-contrib bash
-```
-
-The default Dockerfile installs `.[all]`. Edit the Dockerfile to use `.[torch]`, `.[tensorflow]`, or `.[classical]` for a narrower backend image.
-
-Pull the pre-built image:
-
-```bash
-docker pull ghcr.io/enfuego27826/nilmtk-contrib:latest
-docker run --rm -it ghcr.io/enfuego27826/nilmtk-contrib:latest bash
-```
 
 ## Citation
 

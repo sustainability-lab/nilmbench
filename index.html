@@ -788,12 +788,12 @@ uv pip install git+https://github.com/nilmtk/nilmtk-contrib.git
 
 # That's it. No TensorFlow 1.x, no Python 2.7, no dependency hell.</pre></div>
 
-            <div class="term-pane" id="p-docker"><pre class="code" data-lang="shell"># Pinned, GPU-ready container — bit-for-bit reproducible
-docker pull ghcr.io/enfuego27826/nilmtk-contrib:latest
-docker run --rm -it --gpus all ghcr.io/enfuego27826/nilmtk-contrib:latest bash
+            <div class="term-pane" id="p-docker"><pre class="code" data-lang="shell"># Pinned, GPU-ready container — published on every release
+docker pull ghcr.io/sustainability-lab/nilmtk-contrib:latest
+docker run --rm -it --gpus all ghcr.io/sustainability-lab/nilmtk-contrib:latest bash
 
 # ...or build it locally
-docker build -t nilmtk-contrib .</pre></div>
+docker build -t nilmtk-contrib:all .</pre></div>
 
             <div class="term-pane" id="p-api"><pre class="code" data-lang="python">from nilmtk.api import API
 from nilmtk.disaggregate import Mean
