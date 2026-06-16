@@ -17,8 +17,15 @@ math: katex
 section{
   background:var(--paper); color:var(--ink);
   font-family:'Work Sans',sans-serif; font-size:23px; line-height:1.5;
-  padding:58px 78px;
+  padding:54px 78px 64px;
+  display:flex; flex-direction:column; justify-content:flex-start;
 }
+/* pinned header: kicker + title sit at the same spot on every content slide */
+section > .kick:first-child, section > h2:first-child{ margin-top:0; }
+.kick{ font-family:'Work Sans',sans-serif; font-weight:600; font-size:13px; letter-spacing:0.18em; text-transform:uppercase; color:var(--acc); margin:0 0 6px; }
+/* body after the title fills and centres in the remaining space */
+.vc{ margin:auto 0; }
+.fill{ margin:auto 0; width:100%; }
 section::after{ color:var(--mut); font-family:'Work Sans',sans-serif; font-size:13px; right:34px; }
 footer{ color:var(--mut); font-family:'Work Sans',sans-serif; font-size:13px; }
 
@@ -79,16 +86,25 @@ img{ display:block; margin:0 auto; }
 .callout{ background:var(--paper2); border:1px solid var(--line); border-left:3px solid var(--acc); border-radius:8px; padding:16px 20px; font-size:20px; color:var(--ink2); }
 .callout strong{ color:var(--ink); }
 
-section.title{ text-align:center; padding-top:62px; }
-section.title .logo{ height:38px; margin:0 auto 30px; opacity:.9; }
-section.title h1{ font-size:78px; margin-bottom:10px; }
-section.title .rule{ width:90px; height:3px; background:var(--acc); margin:0 auto 22px; }
-section.title .sub{ font-family:'Playfair Display',serif; font-style:italic; font-size:27px; color:var(--ink2); margin-bottom:34px; }
-section.title .auth{ font-size:23px; color:var(--ink); font-weight:600; }
-section.title .mail{ font-family:'JetBrains Mono',monospace; font-size:14px; color:var(--mut); margin:8px 0 22px; }
-section.title .aff{ font-size:18px; color:var(--ink2); }
-section.title .conf{ font-size:17px; color:var(--mut); margin-top:6px; }
-section.title .conf b{ color:var(--acc); font-weight:600; }
+section.title{ justify-content:center; text-align:left; padding:44px 70px; }
+section.title .t-top{ display:flex; align-items:center; justify-content:space-between; margin-bottom:10px; }
+section.title .t-qr{ display:flex; flex-direction:column; align-items:center; width:120px; }
+section.title .t-qr img{ width:82px; height:82px; }
+section.title .t-qr span{ font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--mut); margin-top:4px; letter-spacing:0.03em; }
+section.title .t-lab{ height:34px; }
+section.title .t-iit{ height:76px; }
+section.title h1{ font-size:72px; margin:2px 0 6px; text-align:left; }
+section.title .t-sub{ font-family:'Playfair Display',serif; font-style:italic; font-size:25px; color:var(--ink2); margin:0 0 14px; }
+section.title .t-hr{ height:2px; background:var(--line); margin:0 0 26px; position:relative; }
+section.title .t-hr::after{ content:''; position:absolute; left:0; top:0; width:80px; height:2px; background:var(--acc); }
+section.title .authors{ display:flex; gap:24px; justify-content:center; margin-bottom:20px; }
+section.title .authors .a{ display:flex; flex-direction:column; align-items:center; width:210px; }
+section.title .authors .a img{ width:118px; height:118px; border-radius:10px; object-fit:cover; border:1px solid var(--line); }
+section.title .authors .a .n{ font-weight:700; font-size:19px; color:var(--ink); margin-top:12px; }
+section.title .authors .a .e{ font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--acc); margin-top:3px; }
+section.title .t-aff{ text-align:center; font-size:19px; color:var(--ink2); font-weight:500; margin-bottom:16px; }
+section.title .t-foot{ display:flex; justify-content:space-between; font-size:14.5px; color:var(--mut); }
+section.title .t-foot b{ color:var(--acc); font-weight:600; }
 
 section.sec{ display:flex; flex-direction:column; justify-content:center; }
 section.sec h1{ font-size:60px; max-width:88%; }
@@ -101,20 +117,30 @@ section.sec .k{ font-size:24px; color:var(--ink2); max-width:78%; margin-top:6px
 <!-- _paginate: false -->
 <!-- _footer: '' -->
 
-<img class="logo" src="figs/lab_logo.png" alt="Sustainability Lab">
+<div class="t-top">
+  <div class="t-qr"><img src="figs/qr_project.png" alt="Project page QR"><span>Project Page</span></div>
+  <img class="t-lab" src="figs/lab_logo.png" alt="Sustainability Lab">
+  <img class="t-iit" src="figs/iitgn_logo.png" alt="IIT Gandhinagar">
+</div>
 
 # NILMBench2026
 
-<div class="rule"></div>
+<div class="t-sub">A deployment-aware benchmark for energy disaggregation</div>
+<div class="t-hr"></div>
 
-<div class="sub">A deployment-aware benchmark for energy disaggregation</div>
+<div class="authors">
+  <div class="a"><img src="figs/au_aayush.png"><div class="n">Aayush Kuloor*</div><div class="e">aayush.kuloor@iitgn.ac.in</div></div>
+  <div class="a"><img src="figs/au_anurag.jpg"><div class="n">Anurag Singh*</div><div class="e">anurag.s@iitgn.ac.in</div></div>
+  <div class="a"><img src="figs/au_harsh.png"><div class="n">Harsh Dhru*</div><div class="e">harsh.dhru@iitgn.ac.in</div></div>
+  <div class="a"><img src="figs/au_nipun.jpg"><div class="n">Nipun Batra</div><div class="e">nipun.batra@iitgn.ac.in</div></div>
+</div>
 
-<div class="auth">Aayush Kuloor* &nbsp;·&nbsp; Anurag Singh* &nbsp;·&nbsp; Harsh Dhru* &nbsp;·&nbsp; Nipun Batra</div>
-<div class="mail">{aayush.kuloor, anurag.s, harsh.dhru, nipun.batra}@iitgn.ac.in</div>
-<div class="aff">Indian Institute of Technology Gandhinagar</div>
-<div class="conf">ACM BuildSys 2026 · Banff, Canada &nbsp;|&nbsp; <b>Best Paper Candidate</b> &nbsp;|&nbsp; *equal contribution</div>
+<div class="t-aff">Indian Institute of Technology Gandhinagar</div>
+<div class="t-foot"><span>ACM BuildSys 2026 · Banff, Canada &nbsp;|&nbsp; <b>Best Paper Candidate</b></span><span>* These authors contributed equally to this work.</span></div>
 
 ---
+
+<div class="kick">Motivation</div>
 
 ## What is NILM, and why does it matter?
 
@@ -138,6 +164,8 @@ $$ y_t = \sum_{i=1}^{N} x_{i,t} + \epsilon_t $$
 
 ---
 
+<div class="kick">Motivation</div>
+
 ## Appliance signatures make disaggregation possible
 
 <img src="figs/appliance_signatures.png" width="940">
@@ -145,6 +173,8 @@ $$ y_t = \sum_{i=1}^{N} x_{i,t} + \epsilon_t $$
 <div class="note" style="text-align:center; margin-top:8px">Each appliance has a distinct electrical fingerprint — periodic (fridge), multi-stage (washing machine), or sparse and high-power (dishwasher).</div>
 
 ---
+
+<div class="kick">Background</div>
 
 ## The evolution of NILM
 
@@ -161,6 +191,8 @@ $$ y_t = \sum_{i=1}^{N} x_{i,t} + \epsilon_t $$
 
 ---
 
+<div class="kick">Why a new benchmark</div>
+
 ## What previous benchmarks missed
 
 | Capability | NILMTK 2014 | Contrib 2019 | NILMBench2026 |
@@ -176,6 +208,8 @@ $$ y_t = \sum_{i=1}^{N} x_{i,t} + \epsilon_t $$
 
 ---
 
+<div class="kick">The benchmark</div>
+
 ## NILMBench2026 at a glance
 
 <div class="kpis">
@@ -188,6 +222,8 @@ $$ y_t = \sum_{i=1}^{N} x_{i,t} + \epsilon_t $$
 <div class="callout"><strong>Evaluation philosophy.</strong> A deployable NILM model must be <strong>accurate</strong>, <strong>event-aware</strong>, <strong>transferable</strong>, and <strong>efficient</strong> — so we measure all four.</div>
 
 ---
+
+<div class="kick">The benchmark</div>
 
 ## A modern, reproducible software stack
 
@@ -218,9 +254,12 @@ uv pip install "nilmtk-contrib[torch] @ git+https://github.com/sustainability-la
 
 ---
 
+<div class="kick">The benchmark</div>
+
 ## Systematic evaluation: three tasks
 
-<div class="cols">
+<div class="cols" style="margin:auto 0">
+
 <div class="col">
 <img src="figs/task_t1.png" width="330">
 <h3>T1 — Same building</h3>
@@ -240,6 +279,8 @@ uv pip install "nilmtk-contrib[torch] @ git+https://github.com/sustainability-la
 
 ---
 
+<div class="kick">The benchmark</div>
+
 ## Datasets
 
 | Dataset | Country | Buildings | Duration | Appliances |
@@ -253,6 +294,8 @@ Six appliances span the difficulty range: **fridge, microwave, kettle, washing m
 <div class="note">Single-building (AMPds, iAWE, BLUED, DRED) and pay-walled (PecanStreet) datasets are excluded — they cannot support cross-building or cross-dataset evaluation.</div>
 
 ---
+
+<div class="kick">Results</div>
 
 ## Finding 1 — Generalization is the bottleneck
 
@@ -274,6 +317,8 @@ Accuracy degrades sharply from **T1 → T2 → T3**, symmetrically in both trans
 
 ---
 
+<div class="kick">Results</div>
+
 ## Finding 2 — MAE hides missed appliance events
 
 <img src="figs/microwave_miss.png" width="780">
@@ -281,6 +326,8 @@ Accuracy degrades sharply from **T1 → T2 → T3**, symmetrically in both trans
 <div class="note" style="text-align:center; margin-top:6px">REFIT microwave (cross-building): all four models miss every high-power activation, yet report a low MAE by predicting near-zero. A near-zero prediction can look acceptable in MAE while missing every event — so we also report <strong style="color:var(--ink)">F1</strong>.</div>
 
 ---
+
+<div class="kick">Results</div>
 
 ## Finding 3 — More compute does not guarantee better NILM
 
@@ -302,6 +349,8 @@ The accuracy–compute trade-off is **non-monotonic**.
 </div>
 
 ---
+
+<div class="kick">The platform</div>
 
 ## How a researcher can contribute
 
@@ -340,6 +389,8 @@ A **new algorithm** is one class; a **new metric** is one function.
 </div>
 
 ---
+
+<div class="kick">Conclusion</div>
 
 ## NILMBench2026: a foundation for deployment
 
