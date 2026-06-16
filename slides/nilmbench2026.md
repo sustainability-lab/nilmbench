@@ -94,7 +94,7 @@ img{ display:block; margin:0 auto; }
 .callout{ background:var(--paper2); border:1px solid var(--line); border-left:3px solid var(--acc); border-radius:8px; padding:16px 20px; font-size:20px; color:var(--ink2); }
 .callout strong{ color:var(--ink); }
 
-section.title{ justify-content:center; text-align:left; padding:44px 70px; }
+section.title{ justify-content:flex-start; text-align:left; padding:14px 70px 24px; }
 section.title .t-top{ display:flex; align-items:center; justify-content:space-between; margin-bottom:10px; }
 section.title .t-qr{ display:flex; flex-direction:column; align-items:center; width:120px; }
 section.title .t-qr img{ width:82px; height:82px; }
@@ -111,7 +111,9 @@ section.title .authors .a img{ width:118px; height:118px; border-radius:10px; ob
 section.title .authors .a .n{ font-weight:700; font-size:19px; color:var(--ink); margin-top:12px; }
 section.title .authors .a .e{ font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--acc); margin-top:3px; }
 section.title .t-aff{ text-align:center; font-size:19px; color:var(--ink2); font-weight:500; margin-bottom:16px; }
-section.title .t-foot{ display:flex; justify-content:space-between; font-size:14.5px; color:var(--mut); }
+section.title .t-foot{ display:grid; grid-template-columns:1fr; gap:4px; text-align:center; font-size:14.5px; line-height:1.25; color:var(--mut); }
+section.title .t-foot span{ min-width:0; }
+section.title .t-foot span:last-child{ text-align:center; max-width:none; }
 section.title .t-foot b{ color:var(--acc); font-weight:600; }
 
 section.sec{ display:flex; flex-direction:column; justify-content:center; }
@@ -124,6 +126,34 @@ section.sec .k{ font-size:24px; color:var(--ink2); max-width:78%; margin-top:6px
 .appl-row span{ display:inline-flex; align-items:center; gap:8px; font-size:18.5px; color:var(--ink); border:1px solid var(--line); border-radius:100px; padding:6px 15px; }
 .ai{ width:20px; height:20px; flex-shrink:0; }
 .cap{ font-size:16px; color:var(--mut); text-align:center; margin-top:10px; }
+
+.model-grid{ display:grid; grid-template-columns:1fr 1fr; gap:16px 22px; margin-top:4px; }
+.model-card{ display:grid; grid-template-columns:1.08fr .92fr; gap:14px; align-items:center; border-top:3px solid var(--line); padding-top:10px; }
+.model-card:nth-child(1), .model-card:nth-child(4){ border-top-color:var(--acc); }
+.model-card img{ max-width:100%; max-height:150px; object-fit:contain; }
+.model-card .mt{ font-weight:700; font-size:18px; color:var(--ink); margin-bottom:5px; }
+.model-card ul{ margin:0; }
+.model-card li{ font-size:14.8px; line-height:1.35; margin:5px 0; padding-left:17px; }
+.model-card li::before{ width:5px; height:5px; border-width:1.5px; top:7px; left:0; }
+
+.task-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:20px; margin-top:6px; align-items:stretch; }
+.task-card{ border-top:3px solid var(--line); padding-top:12px; display:flex; flex-direction:column; min-height:440px; }
+.task-card:nth-child(2){ border-top-color:var(--acc); }
+.task-card img{ width:100%; height:190px; object-fit:contain; }
+.task-card .tt{ font-weight:700; font-size:19px; color:var(--ink); margin:12px 0 10px; }
+.task-card .meta{ display:grid; gap:8px; font-size:14.8px; line-height:1.3; color:var(--ink2); }
+.task-card .tl{ margin-right:5px; display:inline; }
+
+.flow-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:22px; margin-top:36px; }
+.flow-box{ border-top:4px solid var(--line); padding:18px 18px 20px; min-height:215px; background:var(--paper2); border-radius:8px; }
+.flow-box:nth-child(1){ border-top-color:var(--acc); }
+.flow-box:nth-child(2){ border-top-color:var(--navy); }
+.flow-box:nth-child(3){ border-top-color:#2a9d8f; }
+.flow-box .step{ font-family:'JetBrains Mono',monospace; font-size:14px; color:var(--mut); margin-bottom:14px; }
+.flow-box .ft{ font-weight:700; font-size:23px; color:var(--ink); margin-bottom:12px; }
+.flow-box .fd{ font-size:19px; line-height:1.42; color:var(--ink2); }
+.flow-line{ margin-top:30px; font-size:24px; line-height:1.36; color:var(--ink2); text-align:center; }
+.flow-line strong{ color:var(--ink); }
 </style>
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
@@ -188,7 +218,7 @@ inverse problem · signatures vary by home
 </div>
 </div>
 
-<div class="cap" style="text-align:left; margin-top:0">Real data · UK-DALE house 1 (public, via CEDA)</div>
+<div class="cap" style="text-align:left; margin-top:-12px">Real data · UK-DALE house 1 (public, via CEDA)</div>
 
 ---
 
@@ -246,7 +276,7 @@ inverse problem · signatures vary by home
 
 ---
 
-<div class="kick">Background · evolution of NILM</div>
+<div class="kick">Background</div>
 
 ## 1980s–90s — Combinatorial (Hart)
 
@@ -339,87 +369,82 @@ First benchmark to jointly score **efficiency**, **multi-resolution**, and **cro
 
 ## At a glance
 
-<div class="cols">
-<div class="col" style="flex:1.55"><img src="figs/model_tree.png" width="660"></div>
-<div class="col" style="flex:.85">
+<div class="kpis" style="margin-top:26px">
+<div class="kpi">
+<div class="n">16</div>
+<div class="l">models across <strong>4 families</strong><br>★ = 5 added here</div>
+</div>
+<div class="kpi">
+<div class="n">2</div>
+<div class="l">resolutions: <strong>1-min</strong> and <strong>15-min</strong></div>
+</div>
+<div class="kpi">
+<div class="n">576</div>
+<div class="l">benchmark configurations</div>
+</div>
+</div>
 
-**16 models · 4 families** &nbsp; ★ = 5 added here
+<div class="cols" style="font-size:22px; margin-top:26px; gap:42px">
+<div class="col">
 
-**Resolution → application**
+#### Resolution → application
 - **1-min** → real-time feedback, alerts
 - **15-min** → grid / utility planning
 
-**Scale** · 16 × 3 datasets × 2 res. × 6 appliances × 3 runs = **576** configs
+</div>
+<div class="col">
+
+#### Scale
+16 models × 3 datasets × 2 resolutions × 6 appliances × 3 runs.
 
 </div>
 </div>
+
+<div class="callout" style="margin-top:24px">Coverage spans classical methods, probabilistic models, neural architectures, and transformer-based NILM.</div>
+
+---
+
+<!-- _class: demo -->
+<!-- _paginate: false -->
+<!-- _footer: '' -->
 
 ---
 
 <div class="kick">The benchmark</div>
 
-## Reproducible stack — three commands
+## Deployment tasks
 
-<div class="cols">
-<div class="col" style="flex:.82">
-
-#### Before
-- Legacy TensorFlow / Keras
-- Environment drift across papers
-- Accuracy-only reporting
-
-#### Now
-- Standardized **PyTorch**
-- **Docker + uv**, pinned
-- Accuracy · events · compute
-
+<div class="task-grid">
+<div class="task-card">
+<img src="figs/task_t1.png">
+<div class="tt">T1 · Same building</div>
+<div class="meta">
+<div><span class="tl">Setup</span>Disjoint time windows from one home</div>
+<div><span class="tl">Why</span>Best case; appliances seen in training</div>
+<div><span class="tl">Enables</span>Upper-bound accuracy sanity check</div>
+<div><span class="tl">Split</span>train 30 d (B1) → test week (B1)</div>
 </div>
-<div class="col" style="flex:1.3"><img src="figs/terminal.png" width="600"></div>
 </div>
-
----
-
-<div class="kick">The benchmark · tasks</div>
-
-## T1 — Same building
-
-<div style="text-align:center; margin-top:6px"><img src="figs/task_t1.png" width="800"></div>
-
-<div class="cols" style="margin-top:24px; font-size:19px">
-<div class="col"><div class="tl">Setup</div>Disjoint time windows from one home</div>
-<div class="col"><div class="tl">Why</div>Best case — appliances seen in training</div>
-<div class="col"><div class="tl">Enables</div>Upper bound on accuracy; a sanity check</div>
-<div class="col"><div class="tl">Split</div>train 30 d (B1) → test week (B1)</div>
+<div class="task-card">
+<img src="figs/task_t2.png">
+<div class="tt">T2 · New building</div>
+<div class="meta">
+<div><span class="tl">Setup</span>Train on homes, test on an unseen home</div>
+<div><span class="tl">Why</span>Realistic deployment within a region</div>
+<div><span class="tl">Enables</span>Cross-building generalization</div>
+<div><span class="tl">Split</span>UK-DALE B1,B2 → B4 · REDD B1,B2,B3 → B6</div>
 </div>
-
----
-
-<div class="kick">The benchmark · tasks</div>
-
-## T2 — New building
-
-<div style="text-align:center; margin-top:6px"><img src="figs/task_t2.png" width="800"></div>
-
-<div class="cols" style="margin-top:24px; font-size:19px">
-<div class="col"><div class="tl">Setup</div>Train on some homes, test on an unseen home</div>
-<div class="col"><div class="tl">Why</div>Realistic deployment within a region</div>
-<div class="col"><div class="tl">Enables</div>Cross-building generalization</div>
-<div class="col"><div class="tl">Split</div>UK-DALE B1,B2 → B4 · REDD B1,B2,B3 → B6</div>
 </div>
-
----
-
-<div class="kick">The benchmark · tasks</div>
-
-## T3 — New dataset
-
-<div style="text-align:center; margin-top:6px"><img src="figs/task_t3.png" width="800"></div>
-
-<div class="cols" style="margin-top:24px; font-size:19px">
-<div class="col"><div class="tl">Setup</div>Train in one country, test in another</div>
-<div class="col"><div class="tl">Why</div>Zero-shot domain &amp; grid shift (110/230 V)</div>
-<div class="col"><div class="tl">Enables</div>True out-of-distribution transfer</div>
-<div class="col"><div class="tl">Split</div>REDD (USA) ⇄ REFIT (UK)</div>
+<div class="task-card">
+<img src="figs/task_t3.png">
+<div class="tt">T3 · New dataset</div>
+<div class="meta">
+<div><span class="tl">Setup</span>Train in one country, test in another</div>
+<div><span class="tl">Why</span>Zero-shot domain &amp; grid shift (110/230 V)</div>
+<div><span class="tl">Enables</span>Out-of-distribution transfer</div>
+<div><span class="tl">Split</span>REDD (USA) ⇄ REFIT (UK)</div>
+</div>
+</div>
 </div>
 
 ---
@@ -472,11 +497,13 @@ Six appliances span the NILM difficulty range:
 
 ## Finding 2 — MAE hides missed events
 
-<img src="figs/microwave_miss.png" width="780">
+<img src="figs/microwave_miss.png" width="650">
 
-- Predict ≈ 0 → **low MAE**, miss every activation
-- All four models miss the microwave spikes
-- **Report F1** for sparse, high-power loads
+<ul style="margin-top:-6px">
+<li>Predict ≈ 0 → <strong>low MAE</strong>, miss every activation</li>
+<li>All four models miss the microwave spikes</li>
+<li><strong>Report F1</strong> for sparse, high-power loads</li>
+</ul>
 
 ---
 
@@ -502,36 +529,25 @@ Six appliances span the NILM difficulty range:
 
 ## Contribute a model or metric
 
-<div class="cols">
-<div class="col">
-
-```python
-from nilmtk.disaggregate import Disaggregator
-
-class MyNILM(Disaggregator):
-    def partial_fit(self, mains, apps): ...
-    def disaggregate_chunk(self, mains): ...
-
-experiment['methods']['MyNILM'] = MyNILM({})
-```
-
-```python
-def sae(gt, pred):
-    return abs(pred.sum()-gt.sum())/gt.sum()
-experiment['test']['metrics'] += ['sae']
-```
-
+<div class="flow-grid">
+<div class="flow-box">
+<div class="step">01</div>
+<div class="ft">Add model</div>
+<div class="fd">Wrap a <strong>PyTorch</strong> class with the NILMTK-Contrib API.</div>
 </div>
-<div class="col">
-
-- New model · **one class**
-- New metric · **one function**
-- Frozen splits & pre-processing
-- Gains reflect **architecture**, not setup
-- Directly comparable on a shared board
-
+<div class="flow-box">
+<div class="step">02</div>
+<div class="ft">Add experiment</div>
+<div class="fd">Write a declarative JSON config for dataset, appliance, task, and resolution.</div>
+</div>
+<div class="flow-box">
+<div class="step">03</div>
+<div class="ft">Run benchmark</div>
+<div class="fd">Generate <strong>MAE</strong>, <strong>F1</strong>, FLOPs, and timing under the same protocol.</div>
 </div>
 </div>
+
+<div class="flow-line"><strong>NILMBench2026</strong> turns new algorithms and datasets into comparable results quickly.</div>
 
 ---
 
