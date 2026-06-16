@@ -142,52 +142,157 @@ section.sec .k{ font-size:24px; color:var(--ink2); max-width:78%; margin-top:6px
 
 <div class="kick">Motivation</div>
 
-## What is NILM, and why does it matter?
+## What is NILM?
+
+**Single smart-meter signal → appliance-level estimates**
+
+<img src="figs/decomposition.png" width="650">
+
+<div class="cols" style="font-size:18px; margin-top:2px">
+<div class="col">
+
+aggregate = Σ appliance powers + noise
+
+</div>
+<div class="col">
+
+up to **15 %** savings · no per-appliance sensors
+
+</div>
+<div class="col">
+
+inverse problem · signatures vary by home
+
+</div>
+</div>
+
+<div class="cap" style="text-align:left; margin-top:0">Real data: AMPds2 (public dataset)</div>
+
+---
+
+<div class="kick">Motivation · appliance signatures</div>
+
+## Fridge — periodic
 
 <div class="vc">
-<div style="flex:1.25">
+<div style="flex:1.35"><img src="figs/sig_fridge2.png" width="640"></div>
+<div style="flex:.65">
 
-Non-Intrusive Load Monitoring (NILM) converts a **single smart-meter signal**
-into **appliance-level** consumption estimates.
+- Always-on, **periodic**
+- ~100–150 W compressor cycles
+- Fixed duty cycle
+- Easy to detect
 
-$$ y_t = \sum_{i=1}^{N} x_{i,t} + \epsilon_t $$
-
-- **Why it matters:** appliance-level feedback can reduce household consumption by up to **15%** — without installing a sensor on every device
-- It is a hard **inverse problem**: appliance signatures vary across homes, making it a domain-adaptation challenge
-
-</div>
-<div style="flex:1">
-<img src="figs/disaggregation_teaser.png" height="430">
-<div class="cap">UK-DALE: aggregate mains disaggregated into appliances</div>
 </div>
 </div>
 
 ---
 
-<div class="kick">Motivation</div>
+<div class="kick">Motivation · appliance signatures</div>
 
-## Appliance signatures make disaggregation possible
+## Washing machine — multi-stage
 
-<img src="figs/appliance_signatures.png" width="940">
+<div class="vc">
+<div style="flex:1.35"><img src="figs/sig_washer2.png" width="640"></div>
+<div style="flex:.65">
 
-<div class="note" style="text-align:center; margin-top:8px">Each appliance has a distinct electrical fingerprint — periodic (fridge), multi-stage (washing machine), or sparse and high-power (dishwasher).</div>
+- **Multi-stage** cycle
+- Heat → wash → spin
+- Long, variable duration
+- Hard: many sub-states
+
+</div>
+</div>
 
 ---
 
-<div class="kick">Background</div>
+<div class="kick">Motivation · appliance signatures</div>
 
-## The evolution of NILM
+## Dishwasher — sparse, high-power
 
-<div class="stage">
-<div class="s"><div class="y">1980s–90s</div><div class="t">Combinatorial</div><div class="d">Hart's edge detection &amp; optimization</div></div>
-<div class="s"><div class="y">2000s</div><div class="t">Probabilistic</div><div class="d">Factorial Hidden Markov Models</div></div>
-<div class="s on"><div class="y">2015 →</div><div class="t">Deep learning</div><div class="d">CNNs, RNNs (Kelly &amp; Knottenbelt)</div></div>
-<div class="s on"><div class="y">2020 →</div><div class="t">Transformers</div><div class="d">Long-range attention (NILMFormer)</div></div>
+<div class="vc">
+<div style="flex:1.35"><img src="figs/sig_dishwasher2.png" width="640"></div>
+<div style="flex:.65">
+
+- **Sparse** activations
+- High-power heating bursts (~1–2 kW)
+- Long idle gaps
+- MAE-deceptive (mostly off)
+
+</div>
 </div>
 
-<br>
+---
 
-<div class="callout">As models grew more capable, evaluation did not keep pace. Benchmarking had to move <strong>beyond accuracy</strong> — to efficiency, resolution, and generalization.</div>
+<div class="kick">Background · evolution of NILM</div>
+
+## 1980s–90s — Combinatorial (Hart)
+
+<div class="vc">
+<div style="flex:1.25"><img src="figs/hart_edge.png" width="600"></div>
+<div style="flex:.75">
+
+- **Event-based**
+- Detect ON/OFF edges (ΔP)
+- Match power steps to appliances
+- Breaks on variable / multi-state loads
+
+</div>
+</div>
+
+---
+
+<div class="kick">Background · evolution of NILM</div>
+
+## 2000s — Probabilistic (FHMM)
+
+<div class="vc">
+<div style="flex:1.2"><img src="figs/fhmm.png" width="560"></div>
+<div style="flex:.8">
+
+- Each appliance = **hidden Markov chain**
+- Aggregate = sum of emissions
+- Infer hidden states (Kolter et al.)
+- Scales poorly with #appliances
+
+</div>
+</div>
+
+---
+
+<div class="kick">Background · evolution of NILM</div>
+
+## 2015 → Deep learning (Seq2Point)
+
+<div class="vc">
+<div style="flex:1.25"><img src="figs/seq2point.png" width="620"></div>
+<div style="flex:.75">
+
+- Kelly & Knottenbelt: NNs for NILM
+- Sliding **window → CNN → midpoint**
+- Signatures learned from data
+- Strong intra-building accuracy
+
+</div>
+</div>
+
+---
+
+<div class="kick">Background · evolution of NILM</div>
+
+## 2020 → Transformers
+
+<div class="vc">
+<div style="flex:1.25"><img src="figs/transformer.png" width="620"></div>
+<div style="flex:.75">
+
+- **Self-attention** over long context
+- Handles non-stationarity (NILMFormer)
+- Robust at low resolution
+- Higher compute cost
+
+</div>
+</div>
 
 ---
 
@@ -195,91 +300,115 @@ $$ y_t = \sum_{i=1}^{N} x_{i,t} + \epsilon_t $$
 
 ## What previous benchmarks missed
 
-| Capability | NILMTK 2014 | Contrib 2019 | NILMBench2026 |
+| Capability | NILMTK '14 | Contrib '19 | NILMBench2026 |
 |---|---|---|---|
 | Models | 2 | 9 | **16** |
-| Temporal resolutions | variable | 1 min | **1 min and 15 min** |
-| Efficiency metrics | — | — | **FLOPs, params, time** |
-| Cross-building test | — | yes | yes |
-| Cross-dataset transfer | — | — | **yes** |
-| Software stack | Python 2.7 | TensorFlow 1.x | **PyTorch + Docker + uv** |
+| Resolutions | variable | 1-min | **1-min & 15-min** |
+| Efficiency (FLOPs / time) | — | — | **yes** |
+| Cross-building | — | yes | yes |
+| Cross-dataset | — | — | **yes** |
+| Stack | Python 2.7 | TF 1.x | **PyTorch + Docker + uv** |
 
-<div class="callout" style="margin-top:22px">Our contribution is a <strong>deployment stress test</strong> — not just another accuracy leaderboard.</div>
-
----
-
-<div class="kick">The benchmark</div>
-
-## NILMBench2026 at a glance
-
-<div class="kpis">
-<div class="kpi"><div class="n"><em>16</em></div><div class="l">models<br>classical → Transformer</div></div>
-<div class="kpi"><div class="n"><em>3</em></div><div class="l">datasets<br>REDD · UK-DALE · REFIT</div></div>
-<div class="kpi"><div class="n"><em>2</em></div><div class="l">resolutions<br>1-min &amp; 15-min</div></div>
-<div class="kpi"><div class="n"><em>576</em></div><div class="l">configurations<br>16 × 3 × 2 × 6, ×3 runs</div></div>
-</div>
-
-<div class="callout"><strong>Evaluation philosophy.</strong> A deployable NILM model must be <strong>accurate</strong>, <strong>event-aware</strong>, <strong>transferable</strong>, and <strong>efficient</strong> — so we measure all four.</div>
+First benchmark to jointly score **efficiency**, **multi-resolution**, and **cross-domain transfer**.
 
 ---
 
 <div class="kick">The benchmark</div>
 
-## A modern, reproducible software stack
+## At a glance
 
 <div class="cols">
-<div class="col">
+<div class="col" style="flex:1.55"><img src="figs/model_tree.png" width="660"></div>
+<div class="col" style="flex:.85">
+
+**16 models · 4 families** &nbsp; ★ = 5 added here
+
+**Resolution → application**
+- **1-min** → real-time feedback, alerts
+- **15-min** → grid / utility planning
+
+**Scale** · 16 × 3 datasets × 2 res. × 6 appliances × 3 runs = **576** configs
+
+</div>
+</div>
+
+---
+
+<div class="kick">The benchmark</div>
+
+## Reproducible stack — three commands
+
+<div class="cols">
+<div class="col" style="flex:.82">
 
 #### Before
-- Legacy TensorFlow / Keras implementations
+- Legacy TensorFlow / Keras
 - Environment drift across papers
-- One-off model wrappers
-- Accuracy-first reporting
-
-</div>
-<div class="col">
+- Accuracy-only reporting
 
 #### Now
-- Standardized **PyTorch** implementations
-- **Docker** and **uv** reproducibility
-- A common **NILMTK-compatible** experiment API
-- Accuracy, **event detection**, and **compute** metrics
+- Standardized **PyTorch**
+- **Docker + uv**, pinned
+- Accuracy · events · compute
 
 </div>
+<div class="col" style="flex:1.3"><img src="figs/terminal.png" width="600"></div>
 </div>
-
-```bash
-uv pip install "nilmtk-contrib[torch] @ git+https://github.com/sustainability-lab/nilmbench.git"
-```
 
 ---
 
-<div class="kick">The benchmark</div>
+<div class="kick">The benchmark · tasks</div>
 
-## Systematic evaluation: three tasks
+## T1 — Same building
 
-<div class="cols" style="margin:auto 0">
+<div class="vc">
+<div style="flex:1"><img src="figs/task_t1.png" width="430"></div>
+<div style="flex:1">
 
-<div class="col">
-<img src="figs/task_t1.png" width="330">
-<h3>T1 — Same building</h3>
-<div class="note">Disjoint time windows from one home. A best-case baseline.</div>
-</div>
-<div class="col">
-<img src="figs/task_t2.png" width="330">
-<h3>T2 — New building</h3>
-<div class="note">Unseen home, same dataset. Deployment within a region.</div>
-</div>
-<div class="col">
-<img src="figs/task_t3.png" width="330">
-<h3>T3 — New dataset</h3>
-<div class="note">Train in one country, test in another. Zero-shot domain shift.</div>
+**Setup** · disjoint time windows, one home
+**Why** · best-case baseline
+**Enables** · upper bound on accuracy; sanity check
+
 </div>
 </div>
 
 ---
 
-<div class="kick">The benchmark</div>
+<div class="kick">The benchmark · tasks</div>
+
+## T2 — New building
+
+<div class="vc">
+<div style="flex:1"><img src="figs/task_t2.png" width="430"></div>
+<div style="flex:1">
+
+**Setup** · train homes → unseen home, same dataset
+**Why** · realistic deployment in a region
+**Enables** · cross-building generalization
+
+</div>
+</div>
+
+---
+
+<div class="kick">The benchmark · tasks</div>
+
+## T3 — New dataset
+
+<div class="vc">
+<div style="flex:1"><img src="figs/task_t3.png" width="430"></div>
+<div style="flex:1">
+
+**Setup** · train one country → test another (REDD ↔ REFIT)
+**Why** · zero-shot domain & grid shift (110 / 230 V)
+**Enables** · true out-of-distribution transfer
+
+</div>
+</div>
+
+---
+
+<div class="kick">The benchmark · data</div>
 
 ## Datasets
 
@@ -289,9 +418,9 @@ uv pip install "nilmtk-contrib[torch] @ git+https://github.com/sustainability-la
 | **UK-DALE** | UK — 230 V | 5 | 655 days | 5–54 |
 | **REFIT** | UK — 230 V | 20 | 2 years | 9–21 |
 
-Six appliances span the difficulty range: **fridge, microwave, kettle, washing machine, dishwasher, television**.
+Six appliances · fridge · microwave · kettle · washing machine · dishwasher · television
 
-<div class="note">Single-building (AMPds, iAWE, BLUED, DRED) and pay-walled (PecanStreet) datasets are excluded — they cannot support cross-building or cross-dataset evaluation.</div>
+<div class="cap" style="text-align:left">Excluded: single-building (AMPds, iAWE, BLUED, DRED) · pay-walled (PecanStreet)</div>
 
 ---
 
@@ -302,48 +431,42 @@ Six appliances span the difficulty range: **fridge, microwave, kettle, washing m
 <div class="vc">
 <div style="flex:1.05">
 
-Accuracy degrades sharply from **T1 → T2 → T3**, symmetrically in both transfer directions.
+- Accuracy collapses **T1 → T2 → T3**
+- Home-specific signature, **not** transferable concept
+- Symmetric in both transfer directions
 
-- Models learn a **home-specific signature**, not a transferable appliance concept
-- Right: NILMFormer tracks a television it was trained on (lower), but **fails on an unseen one** (upper)
-
-<div class="callout" style="margin-top:14px">The same-building to unseen-building drop is the <strong>core barrier to real-world NILM</strong>.</div>
+<div class="callout" style="margin-top:14px">Right · NILMFormer tracks a trained TV (lower), <strong>fails on an unseen TV</strong> (upper).</div>
 
 </div>
-<div style="flex:.95">
-<img src="figs/generalization_failure.png" height="450">
-</div>
+<div style="flex:.95"><img src="figs/generalization_failure.png" height="450"></div>
 </div>
 
 ---
 
 <div class="kick">Results</div>
 
-## Finding 2 — MAE hides missed appliance events
+## Finding 2 — MAE hides missed events
 
 <img src="figs/microwave_miss.png" width="780">
 
-<div class="note" style="text-align:center; margin-top:6px">REFIT microwave (cross-building): all four models miss every high-power activation, yet report a low MAE by predicting near-zero. A near-zero prediction can look acceptable in MAE while missing every event — so we also report <strong style="color:var(--ink)">F1</strong>.</div>
+- Predict ≈ 0 → **low MAE**, miss every activation
+- All four models miss the microwave spikes
+- **Report F1** for sparse, high-power loads
 
 ---
 
 <div class="kick">Results</div>
 
-## Finding 3 — More compute does not guarantee better NILM
+## Finding 3 — More compute ≠ better
 
 <div class="vc">
-<div style="flex:1.2">
-<img src="figs/efficiency.png" width="640">
-</div>
+<div style="flex:1.2"><img src="figs/efficiency.png" width="640"></div>
 <div style="flex:.8">
 
-The accuracy–compute trade-off is **non-monotonic**.
-
-- **TCN** — 69K params — is competitive with far larger models
-- **NILMFormer** — 383K params — is strongest overall
-- **RNN Att. Cl.** — 4.94M params — is expensive *and* worse
-
-<div class="note" style="margin-top:10px">Architectural inductive bias matters more than raw model size.</div>
+- Trade-off is **non-monotonic**
+- **TCN** (69K) ≈ heavyweights
+- **NILMFormer** (383K) strongest
+- **RNN Att. Cl.** (4.9M) expensive *and* worse
 
 </div>
 </div>
@@ -352,7 +475,7 @@ The accuracy–compute trade-off is **non-monotonic**.
 
 <div class="kick">The platform</div>
 
-## How a researcher can contribute
+## Contribute a model or metric
 
 <div class="cols">
 <div class="col">
@@ -361,29 +484,26 @@ The accuracy–compute trade-off is **non-monotonic**.
 from nilmtk.disaggregate import Disaggregator
 
 class MyNILM(Disaggregator):
-    def partial_fit(self, mains, appliances): ...
+    def partial_fit(self, mains, apps): ...
     def disaggregate_chunk(self, mains): ...
 
 experiment['methods']['MyNILM'] = MyNILM({})
 ```
 
 ```python
-# nilmtk/losses.py — define once
 def sae(gt, pred):
-    return abs(pred.sum() - gt.sum()) / gt.sum()
+    return abs(pred.sum()-gt.sum())/gt.sum()
 experiment['test']['metrics'] += ['sae']
 ```
 
 </div>
 <div class="col">
 
-A **new algorithm** is one class; a **new metric** is one function.
-
-- The same frozen splits and pre-processing apply to every entry
-- Reported gains reflect **architecture**, not implementation differences
-- Results are directly comparable on a shared, open leaderboard
-
-<div class="callout" style="margin-top:14px">NILMBench2026 turns new algorithms and datasets into <strong>comparable results</strong>, quickly.</div>
+- New model · **one class**
+- New metric · **one function**
+- Frozen splits & pre-processing
+- Gains reflect **architecture**, not setup
+- Directly comparable on a shared board
 
 </div>
 </div>
@@ -392,34 +512,30 @@ A **new algorithm** is one class; a **new metric** is one function.
 
 <div class="kick">Conclusion</div>
 
-## NILMBench2026: a foundation for deployment
+## A foundation for deployment
 
 <div class="cols">
 <div class="col">
 
 #### Benchmark
-16 models · 3 datasets · 2 resolutions · 576 configurations
+16 models · 3 datasets · 2 resolutions · 576 configs
 
-#### Key finding
-Generalization — not accuracy — is the main bottleneck
+#### Finding
+Generalization, not accuracy, is the bottleneck
 
 </div>
 <div class="col">
 
 #### Platform
-PyTorch + Docker + uv + the NILMTK API
+PyTorch + Docker + uv + NILMTK API
 
 #### Next
-Domain adaptation · self-supervised pre-training · edge-ready NILM
+Domain adaptation · self-supervised pre-training · edge NILM
 
 </div>
 </div>
 
-<br>
-
-<div class="callout">
-<strong>Code &amp; project page:</strong> github.com/sustainability-lab/nilmbench &nbsp;·&nbsp; sustainability-lab.github.io/nilmbench
-</div>
+<div class="callout">Code &amp; project page · github.com/sustainability-lab/nilmbench &nbsp;·&nbsp; sustainability-lab.github.io/nilmbench</div>
 
 ---
 
@@ -428,7 +544,7 @@ Domain adaptation · self-supervised pre-training · edge-ready NILM
 
 # Thank you.
 
-<div class="k">Generalization is the bottleneck for real-world NILM. NILMBench2026 is the reproducible platform to measure — and close — that gap.</div>
+<div class="k">Generalization is the bottleneck for deployable NILM — NILMBench2026 is the reproducible platform to measure and close that gap.</div>
 
 <br>
 
