@@ -147,17 +147,19 @@ section.title h1{
   font-size:56px; margin:0 0 6px; line-height:1.05;
 }
 .title-bar{
-  display:flex; align-items:center; gap:20px;
+  display:flex; align-items:center;
   margin-bottom:18px;
+  padding-right:120px;
 }
-.title-bar .grow{ flex:1; }
+.title-left{ display:flex; align-items:center; gap:14px; flex-shrink:0; }
 .title-bar img.title-lab{ height:52px; width:auto; margin:0; }
-.title-bar img.title-iit{ height:88px; width:auto; margin:0; }
+.title-bar img.title-iit{ height:64px; width:auto; margin:0; }
 .title-qr{
-  display:flex; flex-direction:column; align-items:center; gap:4px;
+  display:flex; flex-direction:column; align-items:center; gap:3px;
+  margin-left:2px;
 }
-.title-qr img{ width:100px; height:100px; margin:0; }
-.title-qr span{ font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--mut); letter-spacing:0.04em; }
+.title-qr img{ width:68px; height:68px; margin:0; }
+.title-qr span{ font-family:'JetBrains Mono',monospace; font-size:10px; color:var(--mut); letter-spacing:0.04em; }
 .title-sub{
   font-family:'Playfair Display',serif; font-style:italic; font-size:21px; color:var(--ink2); margin:0 0 14px;
 }
@@ -190,7 +192,7 @@ section.title h1{
   padding:7px 15px 7px 12px; border-radius:999px; margin:0 0 16px;
   box-shadow:0 6px 18px -12px rgba(196,69,54,.6);
 }
-.title-badge .medal{ flex-shrink:0; display:block; }
+.title-badge .medal{ flex-shrink:0; display:block; width:16px; height:16px; }
 
 /* ---- appliance signatures (one slide) ---- */
 .sig-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:16px; width:100%; }
@@ -309,19 +311,20 @@ section.design-slide h2{ font-size:30px; margin-bottom:14px; }
 <!-- _footer: '' -->
 
 <div class="title-bar">
-  <img class="title-lab" src="figs/lab_logo.png" alt="Sustainability Lab">
-  <div class="grow"></div>
-  <img class="title-iit" src="figs/iitgn_logo.png" alt="IIT Gandhinagar">
-  <div class="title-qr">
-    <img src="figs/qr_project.png" alt="Project page QR">
-    <span>Project page</span>
+  <div class="title-left">
+    <img class="title-lab" src="figs/lab_logo.png" alt="Sustainability Lab">
+    <img class="title-iit" src="figs/iitgn_logo.png" alt="IIT Gandhinagar">
+    <div class="title-qr">
+      <img src="figs/qr_project.png" alt="Project page QR">
+      <span>Project page</span>
+    </div>
   </div>
 </div>
 
 # NILMBench2026
 
 <p class="title-sub">A deployment-aware benchmark for energy disaggregation</p>
-<div class="title-badge"><svg class="medal" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="9" r="6"/><path d="M8.7 14.3 L7 21 L12 18.4 L17 21 L15.3 14.3"/><path d="M12 6.2 l0.95 1.95 2.15 .3 -1.55 1.5 .37 2.15 -1.92-1.0 -1.92 1.0 .37-2.15 -1.55-1.5 2.15-.3 z" fill="currentColor" stroke="none"/></svg> Best Paper Candidate</div>
+<div class="title-badge"><img class="medal" src="figs/medal.svg" alt=""> Best Paper Candidate</div>
 <div class="title-rule"></div>
 
 <div class="author-row">
