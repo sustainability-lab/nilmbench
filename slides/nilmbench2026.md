@@ -176,6 +176,16 @@ section.title h1{
   text-align:center; font-size:13px; color:var(--ink2); line-height:1.5; margin:0;
 }
 .title-meta b{ color:var(--acc); font-weight:600; }
+.title-badge{
+  display:inline-flex; align-items:center; gap:9px; align-self:flex-start;
+  background:linear-gradient(180deg, rgba(196,69,54,.12), rgba(196,69,54,.04));
+  border:1.5px solid var(--acc); color:var(--acc);
+  font-family:'Work Sans',sans-serif; font-weight:700; font-size:13px;
+  letter-spacing:0.13em; text-transform:uppercase;
+  padding:7px 15px 7px 12px; border-radius:999px; margin:0 0 16px;
+  box-shadow:0 6px 18px -12px rgba(196,69,54,.6);
+}
+.title-badge .medal{ flex-shrink:0; display:block; }
 
 /* ---- appliance signatures (one slide) ---- */
 .sig-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:16px; width:100%; }
@@ -229,6 +239,13 @@ section.evo-slide h2{ margin-bottom:14px; padding-bottom:10px; font-size:32px; }
 .task-card .tt{ font-weight:700; font-size:17px; color:var(--ink); margin-bottom:8px; }
 .task-card .meta{ display:grid; gap:6px; font-size:14px; line-height:1.3; color:var(--ink2); }
 .task-card .tl{ font-weight:700; font-size:11px; letter-spacing:0.08em; text-transform:uppercase; color:var(--acc); margin-right:4px; }
+/* T1/T2/T3 spotlight build: dim future tasks, lift the active one */
+.task-card{ opacity:.24; filter:grayscale(.5);
+  transition:opacity .35s ease, filter .35s ease, box-shadow .35s ease, transform .35s ease, border-top-width .35s ease; }
+.task-card.seen{ opacity:1; filter:none; }
+.task-card.on{ opacity:1; filter:none; border-top-color:var(--acc); border-top-width:4px; transform:translateY(-3px);
+  box-shadow:0 12px 28px -16px rgba(27,35,48,.45);
+  background:linear-gradient(180deg, rgba(196,69,54,.07), rgba(196,69,54,0) 58%); border-radius:0 0 8px 8px; }
 
 .formal-list{ display:grid; grid-template-columns:repeat(3,1fr); gap:18px; margin-top:12px; }
 .formal-list .item{ border-top:3px solid var(--line); padding-top:12px; }
@@ -272,6 +289,7 @@ section.demo{ justify-content:center; }
 # NILMBench2026
 
 <p class="title-sub">A deployment-aware benchmark for energy disaggregation</p>
+<div class="title-badge"><svg class="medal" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="9" r="6"/><path d="M8.7 14.3 L7 21 L12 18.4 L17 21 L15.3 14.3"/><path d="M12 6.2 l0.95 1.95 2.15 .3 -1.55 1.5 .37 2.15 -1.92-1.0 -1.92 1.0 .37-2.15 -1.55-1.5 2.15-.3 z" fill="currentColor" stroke="none"/></svg> Best Paper Candidate</div>
 <div class="title-rule"></div>
 
 <div class="author-row">
@@ -281,7 +299,7 @@ section.demo{ justify-content:center; }
   <div class="a advisor"><img src="figs/au_nipun.jpg" alt=""><div class="n">Nipun Batra</div><div class="role">Faculty advisor<br>IIT&nbsp;Gandhinagar</div><div class="e">nipun.batra@iitgn.ac.in</div></div>
 </div>
 
-<p class="title-meta">ACM BuildSys 2026, Banff, Canada · <b>Best Paper Candidate</b></p>
+<p class="title-meta">ACM BuildSys 2026 · Banff, Canada</p>
 
 ---
 
@@ -742,6 +760,8 @@ section.demo{ justify-content:center; }
 
 ---
 
+<!-- T1/T2/T3 is a 3-step build: spotlight T1 -> T2 -> T3.
+     Edit all three copies to keep them in sync. -->
 <div class="kick">The benchmark</div>
 
 ## Three tasks separate fitting from deployment
@@ -749,7 +769,7 @@ section.demo{ justify-content:center; }
 <div class="slide-body">
 
 <div class="task-row">
-<div class="task-card">
+<div class="task-card on">
 <img src="figs/task_t1.png" alt="">
 <div class="tt">T1 · Same building</div>
 <div class="meta">
@@ -782,6 +802,88 @@ section.demo{ justify-content:center; }
 
 ---
 
+<div class="kick">The benchmark</div>
+
+## Three tasks separate fitting from deployment
+
+<div class="slide-body">
+
+<div class="task-row">
+<div class="task-card seen">
+<img src="figs/task_t1.png" alt="">
+<div class="tt">T1 · Same building</div>
+<div class="meta">
+<div><span class="tl">Setup</span>Disjoint time windows, one home</div>
+<div><span class="tl">Split</span>Train 30 day (B1) → test 1 week (B1)</div>
+<div><span class="tl">Role</span>Upper-bound sanity check</div>
+</div>
+</div>
+<div class="task-card on">
+<img src="figs/task_t2.png" alt="">
+<div class="tt">T2 · New building</div>
+<div class="meta">
+<div><span class="tl">Setup</span>Train on homes, test on unseen home</div>
+<div><span class="tl">Split</span>UK-DALE B1,B2 → B4 · REDD B1–B3 → B6</div>
+<div><span class="tl">Role</span>Cross-building generalization</div>
+</div>
+</div>
+<div class="task-card">
+<img src="figs/task_t3.png" alt="">
+<div class="tt">T3 · New dataset</div>
+<div class="meta">
+<div><span class="tl">Setup</span>Train in one country, test in another</div>
+<div><span class="tl">Split</span>REDD (USA, 110 V) ⇄ REFIT (UK, 230 V)</div>
+<div><span class="tl">Role</span>Zero-shot domain shift</div>
+</div>
+</div>
+</div>
+
+</div>
+
+---
+
+<div class="kick">The benchmark</div>
+
+## Three tasks separate fitting from deployment
+
+<div class="slide-body">
+
+<div class="task-row">
+<div class="task-card seen">
+<img src="figs/task_t1.png" alt="">
+<div class="tt">T1 · Same building</div>
+<div class="meta">
+<div><span class="tl">Setup</span>Disjoint time windows, one home</div>
+<div><span class="tl">Split</span>Train 30 day (B1) → test 1 week (B1)</div>
+<div><span class="tl">Role</span>Upper-bound sanity check</div>
+</div>
+</div>
+<div class="task-card seen">
+<img src="figs/task_t2.png" alt="">
+<div class="tt">T2 · New building</div>
+<div class="meta">
+<div><span class="tl">Setup</span>Train on homes, test on unseen home</div>
+<div><span class="tl">Split</span>UK-DALE B1,B2 → B4 · REDD B1–B3 → B6</div>
+<div><span class="tl">Role</span>Cross-building generalization</div>
+</div>
+</div>
+<div class="task-card on">
+<img src="figs/task_t3.png" alt="">
+<div class="tt">T3 · New dataset</div>
+<div class="meta">
+<div><span class="tl">Setup</span>Train in one country, test in another</div>
+<div><span class="tl">Split</span>REDD (USA, 110 V) ⇄ REFIT (UK, 230 V)</div>
+<div><span class="tl">Role</span>Zero-shot domain shift</div>
+</div>
+</div>
+</div>
+
+</div>
+
+---
+
+<!-- Finding 1 is a 3-step build: reveal one bar at a time; the jump arrow
+     and the takeaways land on step 3. Edit all three copies to keep in sync. -->
 <div class="kick">Results</div>
 
 ## Finding 1 — Domain shift drives the largest error jump
@@ -790,7 +892,57 @@ section.demo{ justify-content:center; }
 
 <div class="vc">
 <div class="fig-col">
-<img class="fig-xl" src="figs/generalization_trend.png" alt="Mean MAE across T1 T2 T3">
+<img class="fig-xl" src="figs/generalization_trend_1.png" alt="Mean MAE across T1 T2 T3">
+</div>
+<div class="txt-col">
+<ul>
+<li class="fade">Mean MAE rises from <strong>T1 → T2 → T3</strong> (UK-DALE / REDD→REFIT splits)</li>
+<li class="fade">Same-home accuracy is <strong>not</strong> a deployment metric</li>
+<li class="fade">Cross-dataset transfer is the hardest stress test</li>
+</ul>
+</div>
+</div>
+
+<div class="callout callout-full fade">Use T1 as a sanity check; deployment claims need <strong>T2 and T3</strong>.</div>
+
+</div>
+
+---
+
+<div class="kick">Results</div>
+
+## Finding 1 — Domain shift drives the largest error jump
+
+<div class="slide-body">
+
+<div class="vc">
+<div class="fig-col">
+<img class="fig-xl" src="figs/generalization_trend_2.png" alt="Mean MAE across T1 T2 T3">
+</div>
+<div class="txt-col">
+<ul>
+<li class="fade">Mean MAE rises from <strong>T1 → T2 → T3</strong> (UK-DALE / REDD→REFIT splits)</li>
+<li class="fade">Same-home accuracy is <strong>not</strong> a deployment metric</li>
+<li class="fade">Cross-dataset transfer is the hardest stress test</li>
+</ul>
+</div>
+</div>
+
+<div class="callout callout-full fade">Use T1 as a sanity check; deployment claims need <strong>T2 and T3</strong>.</div>
+
+</div>
+
+---
+
+<div class="kick">Results</div>
+
+## Finding 1 — Domain shift drives the largest error jump
+
+<div class="slide-body">
+
+<div class="vc">
+<div class="fig-col">
+<img class="fig-xl" src="figs/generalization_trend_3.png" alt="Mean MAE across T1 T2 T3">
 </div>
 <div class="txt-col">
 <ul>

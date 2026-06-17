@@ -1,0 +1,89 @@
+/* Click-to-comment review overlay for the hosted HTML deck.
+   Injected into the built deck by scripts/inject_review.py (not part of Marp). */
+.nr-hidden{ display:none !important; }
+
+/* floating toggle button (bottom-left, clear of bespoke's bottom-centre controls) */
+#nr-fab{
+  position:fixed; left:16px; bottom:16px; z-index:2147483600;
+  display:flex; align-items:center; gap:8px;
+  font-family:'Work Sans',system-ui,sans-serif; font-size:13px; font-weight:600;
+  background:#ffffff; color:#1b2330; border:1.5px solid #d8dbe0; border-radius:999px;
+  padding:8px 14px; cursor:pointer; box-shadow:0 8px 22px -12px rgba(27,35,48,.5);
+  user-select:none;
+}
+#nr-fab .nr-dot{ width:9px; height:9px; border-radius:50%; background:#c44536; }
+#nr-fab .nr-count{ color:#8b929c; font-weight:600; }
+#nr-fab.nr-armed{ background:#c44536; color:#fff; border-color:#c44536; }
+#nr-fab.nr-armed .nr-dot{ background:#fff; }
+#nr-fab.nr-armed .nr-count{ color:#ffd9d3; }
+
+/* pins layer (always visible so reviewers see existing comments) */
+#nr-pins{ position:fixed; inset:0; z-index:2147483500; pointer-events:none; }
+.nr-pin{
+  position:absolute; transform:translate(-50%,-100%);
+  width:26px; height:26px; border-radius:50% 50% 50% 2px;
+  background:#c44536; color:#fff; border:2px solid #fff;
+  box-shadow:0 4px 12px -3px rgba(27,35,48,.6);
+  font:700 12px/22px 'Work Sans',system-ui,sans-serif; text-align:center;
+  pointer-events:auto; cursor:pointer; rotate:45deg;
+}
+.nr-pin span{ display:block; rotate:-45deg; }
+.nr-pin.nr-active{ background:#1b3b6f; }
+
+/* click-capture layer over the active slide while arming a comment */
+#nr-capture{ position:fixed; z-index:2147483520; cursor:crosshair; background:rgba(196,69,54,.04); }
+
+/* editor / viewer popover */
+#nr-pop{
+  position:fixed; z-index:2147483601; width:300px; max-width:88vw;
+  background:#fff; border:1px solid #d8dbe0; border-radius:12px;
+  box-shadow:0 18px 50px -18px rgba(27,35,48,.6);
+  font-family:'Work Sans',system-ui,sans-serif; color:#1b2330; padding:14px;
+}
+#nr-pop .nr-meta{ font-size:11px; color:#8b929c; margin-bottom:8px; letter-spacing:.02em; }
+#nr-pop textarea{
+  width:100%; box-sizing:border-box; min-height:84px; resize:vertical;
+  font:14px/1.45 'Work Sans',system-ui,sans-serif; color:#1b2330;
+  border:1px solid #d8dbe0; border-radius:8px; padding:9px 10px; outline:none;
+}
+#nr-pop textarea:focus{ border-color:#c44536; }
+#nr-pop .nr-row{ display:flex; gap:8px; align-items:center; margin-top:10px; }
+#nr-pop .nr-grow{ flex:1; }
+.nr-btn{
+  font:600 12.5px 'Work Sans',system-ui,sans-serif; cursor:pointer;
+  border-radius:7px; padding:7px 12px; border:1.5px solid #d8dbe0; background:#fff; color:#1b2330;
+}
+.nr-btn.nr-primary{ background:#c44536; border-color:#c44536; color:#fff; }
+.nr-btn.nr-danger{ color:#c44536; border-color:#efc7c1; }
+.nr-btn:hover{ filter:brightness(.97); }
+
+/* side panel: list + share controls */
+#nr-panel{
+  position:fixed; right:0; top:0; bottom:0; width:340px; max-width:92vw; z-index:2147483560;
+  background:#fff; border-left:1px solid #d8dbe0; box-shadow:-12px 0 40px -20px rgba(27,35,48,.5);
+  font-family:'Work Sans',system-ui,sans-serif; color:#1b2330; display:flex; flex-direction:column;
+}
+#nr-panel header{ padding:16px 16px 12px; border-bottom:1px solid #eef0f3; }
+#nr-panel header .nr-title{ font-weight:700; font-size:16px; }
+#nr-panel header .nr-sub{ font-size:12px; color:#8b929c; margin-top:2px; }
+#nr-panel .nr-name{ display:flex; gap:8px; align-items:center; padding:12px 16px; border-bottom:1px solid #eef0f3; }
+#nr-panel .nr-name input{ flex:1; font:13px 'Work Sans',system-ui,sans-serif; border:1px solid #d8dbe0; border-radius:7px; padding:6px 9px; outline:none; }
+#nr-list{ flex:1; overflow:auto; padding:8px 12px; }
+#nr-list .nr-item{ border:1px solid #eef0f3; border-radius:9px; padding:9px 11px; margin:8px 0; cursor:pointer; }
+#nr-list .nr-item:hover{ border-color:#d8dbe0; background:#fafbfc; }
+#nr-list .nr-item .nr-where{ font-size:11px; font-weight:700; color:#c44536; letter-spacing:.04em; }
+#nr-list .nr-item .nr-txt{ font-size:13px; color:#1b2330; margin-top:3px; white-space:pre-wrap; }
+#nr-list .nr-item .nr-who{ font-size:11px; color:#8b929c; margin-top:4px; }
+#nr-list .nr-empty{ color:#8b929c; font-size:13px; text-align:center; padding:30px 10px; }
+#nr-panel footer{ border-top:1px solid #eef0f3; padding:12px; display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+#nr-panel footer .nr-btn{ width:100%; box-sizing:border-box; text-align:center; }
+#nr-toast{
+  position:fixed; left:50%; bottom:64px; transform:translateX(-50%); z-index:2147483602;
+  background:#1b2330; color:#fff; font:13px 'Work Sans',system-ui,sans-serif;
+  padding:9px 16px; border-radius:8px; box-shadow:0 10px 30px -10px rgba(0,0,0,.5);
+}
+
+/* never show the overlay in a printed / exported PDF */
+@media print{
+  #nr-fab,#nr-pins,#nr-panel,#nr-pop,#nr-capture,#nr-toast{ display:none !important; }
+}

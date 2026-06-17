@@ -208,31 +208,42 @@ def efficiency():
     ax.annotate("better:\naccurate & light",(95,15.2),fontsize=11,color=GRY,style="italic",ha="left",va="center")
     fig.tight_layout(); fig.savefig(os.path.join(FIGS, "efficiency.png"), bbox_inches="tight", facecolor="white"); plt.close(fig)
 
-def generalization_trend():
-    # Reported table means from the project site / paper result tables.
+def generalization_trend(reveal=3, fname="generalization_trend.png"):
+    """Mean MAE across T1/T2/T3. `reveal` (1..3) controls how many bars are drawn
+    so the deck can build the chart one bar at a time; the T2->T3 jump arrow only
+    appears once T3 is shown. Axes are fixed across stages so the frames swap
+    without jumping. Reported table means from the project site / paper tables."""
     tasks = ["T1\nsame building", "T2\nnew building", "T3\nnew dataset"]
     values = [32.86, 34.08, 55.46]
     colors = [BLUE, NAVY, ACC]
     fig, ax = plt.subplots(figsize=(9.2, 4.4), dpi=200)
-    x = np.arange(len(tasks))
-    bars = ax.bar(x, values, width=0.58, color=colors, alpha=0.95, zorder=3)
-    ax.plot(x, values, color=INK, lw=1.6, marker="o", ms=5, zorder=4)
-    for b, v in zip(bars, values):
-        ax.text(b.get_x() + b.get_width() / 2, v + 1.2, f"{v:.1f} W",
-                ha="center", va="bottom", fontsize=13, color=INK, fontweight="bold")
+    x = np.arange(len(tasks)); width = 0.40
+    for i, (xi, v, c) in enumerate(zip(x, values, colors)):
+        if i >= reveal:
+            continue
+        ax.bar(xi, v, width=width, color=c, alpha=0.95, zorder=3)
+        ax.text(xi, v + 1.3, f"{v:.1f} W", ha="center", va="bottom",
+                fontsize=13, color=INK, fontweight="bold")
+    # fixed axes for all stages
     ax.set_xticks(x); ax.set_xticklabels(tasks, fontsize=12, color=INK)
     ax.set_ylabel("Mean MAE (W, lower is better)", fontsize=12.5, color=INK)
-    ax.set_ylim(0, 66)
+    ax.set_ylim(0, 66); ax.set_xlim(-0.6, 2.6)
     ax.grid(True, axis="y", color="#e9ebef", lw=0.9, zorder=0)
     ax.spines[["top", "right"]].set_visible(False)
     ax.tick_params(axis="y", colors="#5a626e")
-    ax.text(0.02, 0.96, "Mean across reported task table entries",
+    ax.text(0.02, 0.97, "Mean across reported task table entries",
             transform=ax.transAxes, ha="left", va="top", fontsize=11, color="#8b929c")
-    ax.annotate("domain shift hurts most", xy=(2, values[2]), xytext=(1.25, 61),
-                arrowprops=dict(arrowstyle="->", color=ACC, lw=1.5),
-                fontsize=12, color=ACC, fontweight="bold")
+    # the jump: a bold arrow from the T2 level up to T3, only when T3 is revealed
+    if reveal >= 3:
+        ax.annotate("", xy=(2, values[2] - 2.0), xytext=(1, values[1] + 1.5),
+                    arrowprops=dict(arrowstyle="-|>", color=ACC, lw=3,
+                                    mutation_scale=26, shrinkA=3, shrinkB=4,
+                                    connectionstyle="arc3,rad=-0.16"))
+        ax.text(1.30, 52, f"+{values[2]-values[1]:.0f} W\ndomain shift\nhurts most",
+                ha="center", va="center", fontsize=12.5, color=ACC,
+                fontweight="bold", linespacing=1.25)
     fig.tight_layout()
-    fig.savefig(os.path.join(FIGS, "generalization_trend.png"), bbox_inches="tight", facecolor="white")
+    fig.savefig(os.path.join(FIGS, fname), bbox_inches="tight", facecolor="white")
     plt.close(fig)
 
 def main():
@@ -247,7 +258,10 @@ def main():
     signature(df,"washer",ACC,"washer","sig_washer2.png",wwin,"Washing machine · UK-DALE house 1",1.5)
     dw = df.loc[day,"dishwasher"]; on = dw[dw>50]
     signature(df,"dishwasher",TEAL,"dishwasher","sig_dishwasher2.png",(on.index.min()-pd.Timedelta("15min"),on.index.max()+pd.Timedelta("15min")),"Heating elements — high-power bursts",1.45)
-    hart(); efficiency(); generalization_trend()
+    hart(); efficiency()
+    for r in (1, 2, 3):
+        generalization_trend(reveal=r, fname=f"generalization_trend_{r}.png")
+    generalization_trend(reveal=3)            # full version, generalization_trend.png
     print("done ->", os.path.normpath(FIGS))
 
 if __name__ == "__main__":
