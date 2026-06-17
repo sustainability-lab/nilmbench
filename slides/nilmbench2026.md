@@ -270,6 +270,26 @@ section.demo{ justify-content:center; }
 .shift-box .val{ font-family:'Playfair Display',serif; font-weight:800; font-size:28px; color:var(--ink); margin:4px 0; }
 .shift-box .desc{ font-size:14px; color:var(--ink2); line-height:1.3; }
 .shift-arrow{ display:flex; align-items:center; justify-content:center; width:36px; font-size:22px; color:var(--mut); flex-shrink:0; }
+
+/* ---- design goals ---- */
+section.design-slide{ padding-top:42px; }
+section.design-slide h2{ font-size:30px; margin-bottom:14px; }
+.design-body{ display:flex; gap:24px; align-items:stretch; width:100%; flex:1; min-height:0; }
+.design-panel{ flex:1; min-width:0; border-top:3px solid var(--line); padding-top:12px; display:flex; flex-direction:column; gap:10px; }
+.design-panel.do{ border-top-color:var(--acc); }
+.design-panel h4{ margin-bottom:2px; }
+.design-panel ul{ margin:0; }
+.design-panel li{ font-size:18px; margin:7px 0; }
+.design-panel .fig-box{ flex:1; min-height:0; display:flex; align-items:center; justify-content:center; margin-top:4px; }
+.design-panel .fig-box img{ width:100%; max-height:300px; object-fit:contain; border:1px solid var(--line); border-radius:6px; background:#1e1e1e; margin:0; }
+.design-callout{ margin-top:14px; font-size:17px; }
+.design-duo{ display:flex; gap:28px; align-items:stretch; width:100%; flex:1; min-height:0; }
+.design-goal{ flex:1; min-width:0; border-top:3px solid var(--line); padding-top:12px; display:flex; flex-direction:column; gap:12px; }
+.design-goal:nth-child(1){ border-top-color:var(--navy); }
+.design-goal:nth-child(2){ border-top-color:var(--acc); }
+.design-goal .goal-title{ font-weight:700; font-size:19px; color:var(--ink); line-height:1.25; margin:0; }
+.design-goal .goal-block h4{ margin-bottom:4px; }
+.design-goal li{ font-size:16.5px; margin:5px 0; line-height:1.35; }
 </style>
 
 <!-- _class: title -->
@@ -663,7 +683,7 @@ section.demo{ justify-content:center; }
 
 <div class="slide-body">
 
-| Capability | NILMTK '14 | Contrib '19 | NILMBench2026 |
+| Capability | NILMTK<br><span class="note">e-Energy 2014</span> | NILMTK-Contrib<br><span class="note">BuildSys 2019</span> | NILMBench2026<br><span class="note">BuildSys 2026</span> |
 |---|---|---|---|
 | Models | 2 | 9 | **16** |
 | Resolutions | variable | 1-min | **1-min & 15-min** |
@@ -704,46 +724,87 @@ section.demo{ justify-content:center; }
 
 ---
 
-<!-- _class: bench-slide -->
+<!-- _class: design-slide -->
 
-<div class="kick">The benchmark</div>
+<div class="kick">The benchmark · design</div>
 
-## NILMBench makes deployment tests reproducible
+## Design goal 1 — Reproducible ML tooling
 
-<div class="slide-body bench-slide tight">
+<div class="slide-body">
 
-<div class="kpis">
-<div class="kpi"><div class="n">16</div><div class="l">models · <strong>4 families</strong></div></div>
-<div class="kpi"><div class="n">3</div><div class="l">datasets · UK-DALE, REDD, REFIT</div></div>
-<div class="kpi"><div class="n">2</div><div class="l">resolutions · <strong>1-min</strong> &amp; <strong>15-min</strong></div></div>
-</div>
-
-<div class="bench-body">
-<div class="bench-info">
-<div class="bench-block">
-<h4>Three evaluation tasks</h4>
+<div class="design-body">
+<div class="design-panel">
+<h4>Motivation</h4>
 <ul>
-<li><strong>T1</strong> same building — sanity check</li>
-<li><strong>T2</strong> new building — realistic deploy</li>
-<li><strong>T3</strong> new dataset — domain shift</li>
+<li>Legacy NILMTK stacks were brittle — Python&nbsp;2.7, TensorFlow&nbsp;1.x, broken installs</li>
+<li>Hard to reproduce published numbers or compare new models fairly</li>
 </ul>
+<div class="fig-box">
+<img src="figs/github_issues.png" alt="GitHub installation issues for legacy NILMTK">
 </div>
-<div class="bench-block">
-<h4>Four metric axes</h4>
+</div>
+<div class="design-panel do">
+<h4>What we do</h4>
 <ul>
-<li>Regression <strong>MAE</strong></li>
-<li>Event detection <strong>F1</strong></li>
-<li><strong>Parameters</strong> &amp; FLOPs</li>
-<li>Cross-domain <strong>generalization</strong></li>
+<li>Re-implement legacy models in <strong>PyTorch</strong> under a unified API</li>
+<li>Ship sealed runs with <strong>Docker</strong> and <strong>uv</strong></li>
+<li>Extend the NILMTK Experiment API so every model follows the same train / test protocol</li>
 </ul>
 </div>
 </div>
-<div class="bench-shot">
-<img src="figs/github_issues.png" alt="GitHub installation issues">
-</div>
+
+<div class="callout design-callout"><strong>Goal:</strong> a new architecture should take <strong>minutes to benchmark</strong>, not days to debug the install.</div>
+
 </div>
 
-<div class="callout bench-callout-full"><strong>Modernized tooling.</strong> Legacy NILMTK installs were brittle; we rebuilt the stack in PyTorch with <strong>Docker</strong> and <strong>uv</strong>.</div>
+---
+
+<!-- _class: design-slide -->
+
+<div class="kick">The benchmark · design</div>
+
+## Design goals 2 &amp; 3 — What we evaluate
+
+<div class="slide-body">
+
+<div class="design-duo">
+<div class="design-goal">
+<p class="goal-title">2 · Real-world relevance</p>
+<div class="goal-block">
+<h4>Motivation</h4>
+<ul>
+<li>NILM at <strong>user-feedback</strong> and <strong>utility-scale</strong> timescales</li>
+<li>Deployment = new homes, regions, grid conditions</li>
+</ul>
+</div>
+<div class="goal-block">
+<h4>What we do</h4>
+<ul>
+<li><strong>1-min</strong> &amp; <strong>15-min</strong> on REDD, UK-DALE, REFIT</li>
+<li>Sealed <strong>cross-building</strong> &amp; <strong>cross-dataset</strong> splits</li>
+<li>Regression <strong>MAE</strong> + event <strong>F1</strong> for sparse loads</li>
+</ul>
+</div>
+</div>
+<div class="design-goal">
+<p class="goal-title">3 · Comprehensive coverage</p>
+<div class="goal-block">
+<h4>Motivation</h4>
+<ul>
+<li>Prior work: few models, <strong>accuracy only</strong></li>
+<li>Deployment needs efficiency &amp; event detection too</li>
+</ul>
+</div>
+<div class="goal-block">
+<h4>What we do</h4>
+<ul>
+<li><strong>16 models</strong> · recurrent, conv, attention, hybrid</li>
+<li><strong>MAE</strong>, <strong>F1</strong>, <strong>parameters</strong>, <strong>FLOPs</strong> — one protocol</li>
+<li>First to combine multi-resolution, efficiency &amp; transfer</li>
+</ul>
+</div>
+</div>
+</div>
 
 </div>
 
